@@ -3,6 +3,7 @@
 namespace Wikichua\Instant\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class Setting extends Model
 {
@@ -30,7 +31,12 @@ class Setting extends Model
     public function getValueAttribute($value)
     {
         if (isset($this->attributes['protected']) && 1 == $this->attributes['protected']) {
-            $value = decrypt(trim($value));
+            try {
+                $value = decrypt(trim($value));
+            } catch (DecryptException $e) {
+            } finally {
+                $value = trim($value);
+            }
         }
         if (json_decode($value)) {
             return json_decode($value, 1);
