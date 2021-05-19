@@ -11,13 +11,14 @@
             </template>
             <form @submit.prevent="submit">
                 <div class="shadow overflow-hidden sm:rounded-md">
-                    <instant-input-field label="Group" :form="form" objprop="group" id="group"/>
-                    <!-- <instant-multi-rows-input-field label="reports" :form="form" objprop="name" id="name"/> -->
+                    <instant-input-field label="Name" :form="form" objprop="name" id="name"/>
+                    <instant-input-field type="number" label="TTL (Seconds)" :form="form" objprop="cache_ttl" id="cache_ttl"/>
+                    <instant-multi-rows-input-field label="SQL queries" :form="form" objprop="queries" id="queries" type="textarea"/>
+                    <instant-select-field label="Status" :form="form" objprop="status" id="status" :options="status" />
                     <instant-button-field>Save</instant-button-field>
                 </div>
             </form>
         </instant-content-card>
-        <instant-other-content-card :model="model" />
     </authenticated-layout>
 </template>
 
@@ -32,8 +33,10 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    group: '',
-                    name: [''],
+                    name: '',
+                    cache_ttl: '',
+                    queries: [''],
+                    status: '',
                 })
             }
         },
@@ -41,6 +44,7 @@
         props: {
             auth: Object,
             errors: Object,
+            status: Object,
         },
 
         methods: {

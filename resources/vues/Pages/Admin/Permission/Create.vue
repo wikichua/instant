@@ -17,7 +17,6 @@
                 </div>
             </form>
         </instant-content-card>
-        <instant-other-content-card :model="model" />
     </authenticated-layout>
 </template>
 

@@ -71,7 +71,12 @@ class ReportController extends Controller
             $trail->push('Create Report');
         });
 
-        return inertia('Admin/Report/Create');
+        $status = [];
+        foreach (settings('report_status') as $value => $label) {
+            $status[] = ['value' => $value, 'label' => $label];
+        }
+
+        return inertia('Admin/Report/Create', compact('status'));
     }
 
     public function store(Request $request)
@@ -97,7 +102,7 @@ class ReportController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return Redirect::route('report.show', [$model->id], [
+        return Redirect::route('report.show', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Report Created.',
         ]);
@@ -150,7 +155,12 @@ class ReportController extends Controller
         });
         $model = app(config('instant.Models.Report'))->query()->with(['creator','modifier'])->findOrFail($id);
 
-        return inertia('Admin/Report/Edit', compact('model'));
+        $status = [];
+        foreach (settings('report_status') as $value => $label) {
+            $status[] = ['value' => $value, 'label' => $label];
+        }
+
+        return inertia('Admin/Report/Edit', compact('model', 'status'));
     }
 
     public function update(Request $request, $id)
@@ -177,7 +187,7 @@ class ReportController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return Redirect::route('report.edit', [$id], [
+        return Redirect::route('report.edit', [$id])->with([
             'status' => 'success',
             'flash' => 'Report Updated.',
         ]);
@@ -196,7 +206,7 @@ class ReportController extends Controller
         ]);
         $model->delete();
 
-        return Redirect::route('report', [
+        return Redirect::route('report')->with([
             'status' => 'success',
             'flash' => 'Report Deleted.',
         ]);

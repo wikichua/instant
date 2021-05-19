@@ -1,7 +1,7 @@
 <template>
     <authenticated-layout>
         <template #page-title>
-            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('permission')">
+            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('report')">
                 {{ $page.props.moduleName }}
             </inertia-link>
         </template>
@@ -18,7 +18,7 @@
             </template>
             <instant-datatable :models="models" :columns="columns" :actionsComponent="InstantActions">
                 <template #header-action-slot>
-                    <instant-create-link :href="route('permission.create')" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="can.create" />
+                    <instant-create-link :href="route('report.create')" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="can.create" />
                 </template>
             </instant-datatable>
             <instant-search-modal>
@@ -30,8 +30,8 @@
 
 <script>
     import AuthenticatedLayout from '@/Layouts/Authenticated'
-    import InstantActions from '@/Pages/Admin/Permission/Actions'
-    import InstantSearch from '@/Pages/Admin/Permission/Search'
+    import InstantActions from '@/Pages/Admin/Report/Actions'
+    import InstantSearch from '@/Pages/Admin/Report/Search'
     import { reactive } from 'vue'
 
     export default {

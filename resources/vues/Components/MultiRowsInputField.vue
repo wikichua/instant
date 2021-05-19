@@ -4,7 +4,10 @@
             <div class="col-span-6">
                 <instant-label :value="label" class="block text-sm font-medium text-gray-700" />
                 <div class="grid grid-cols-6 gap-4 w-full" v-for="(data, index) in form[objprop]" :key="index">
-                    <instant-input :id="id" type="text" class="col-span-5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="form[objprop][index]" :disabled="disabled"/>
+                    <instant-input :id="id" type="text" class="col-span-5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="form[objprop][index]" :disabled="disabled" v-if="type === 'text'" />
+
+                    <textarea class="col-span-5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-1 focus:ring-indigo-500 sm:text-sm" v-model="form[objprop][index]" :disabled="disabled" rows="1" v-if="type === 'textarea'"></textarea>
+
                     <div class="col-span-1 py-2 text-right">
                         <button type="button" @click="plusRow(form[objprop])" :disabled="disabled">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500" viewBox="0 0 20 20" fill="currentColor">
@@ -31,6 +34,10 @@ export default {
         label: String,
         form: Object,
         objprop: String,
+        type: {
+            type: String,
+            default: 'text'
+        },
         disabled: {
             type: Boolean,
             default: false,
