@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['web', 'auth_admin', 'can:access-admin-panel']], function () {
     Route::group(['prefix' => 'nav'], function () {
-        Route::match(['get'], '', [config('instant.Controllers.Nav'),'index'])->name('nav');
+        Route::match(['get','post'], '', [config('instant.Controllers.Nav'),'index'])->name('nav');
         Route::match(['get'], '{nav}/read', [config('instant.Controllers.Nav'),'show'])->name('nav.show');
         Route::match(['get'], 'create', [config('instant.Controllers.Nav'),'create'])->name('nav.create');
         Route::match(['post'], 'create', [config('instant.Controllers.Nav'),'store'])->name('nav.store');

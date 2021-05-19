@@ -47,7 +47,6 @@ class AuditController extends Controller
             ['title' => '', 'data' => 'actionsView'],
         ];
 
-        $groups = app(config('instant.Models.Permission'))->query()->select([\DB::raw('`group` as label'),\DB::raw('`group` as value')])->groupBy('label')->get()->toArray();
         return inertia('Admin/Audit/Index', compact('columns', 'can', 'models'));
     }
 

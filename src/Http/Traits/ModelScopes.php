@@ -64,7 +64,7 @@ trait ModelScopes
         return $query->where($field_start_at, '<=', $value)->where($field_end_at, '>=', $value);
     }
 
-    public function getDateFilter($search)
+    /*public function getDateFilter($search)
     {
         if (\Str::contains($search, ' - ')) { // date range
             $search = explode(' - ', $search);
@@ -74,7 +74,30 @@ trait ModelScopes
             $start_at = Carbon::parse($search)->format('Y-m-d 00:00:00');
             $stop_at = Carbon::parse($search)->addDay()->format('Y-m-d 00:00:00');
         }
-
         return compact('start_at', 'stop_at');
+    }*/
+
+    public function scopeFilterCreatedAt($query, $search)
+    {
+        return $query->whereBetween('created_at', [
+            $this->inUserTimezone($search['start']),
+            $this->inUserTimezone($search['end']),
+        ]);
+    }
+
+    public function scopeFilterUpdatedAt($query, $search)
+    {
+        return $query->whereBetween('updated_at', [
+            $this->inUserTimezone($search['start']),
+            $this->inUserTimezone($search['end']),
+        ]);
+    }
+
+    public function scopeFilterDeletedAt($query, $search)
+    {
+        return $query->whereBetween('deleted_at', [
+            $this->inUserTimezone($search['start']),
+            $this->inUserTimezone($search['end']),
+        ]);
     }
 }

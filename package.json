@@ -27,6 +27,7 @@
         "postcss": "^8.2.13",
         "postcss-import": "^14.0.1",
         "tailwindcss": "^2.0.3",
+        "v-calendar": "^3.0.0-alpha.4",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2",
         "vue-template-compiler": "^2.6.12"

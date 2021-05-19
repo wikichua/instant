@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['web', 'auth_admin', 'can:access-admin-panel']], function () {
     Route::group(['prefix' => 'user'], function () {
-        Route::match(['get'], '', [config('instant.Controllers.User'),'index'])->name('user');
+        Route::match(['get','post'], '', [config('instant.Controllers.User'),'index'])->name('user');
         Route::match(['get'], '{user}/read', [config('instant.Controllers.User'),'show'])->name('user.show');
         Route::match(['get'], 'create', [config('instant.Controllers.User'),'create'])->name('user.create');
         Route::match(['post'], 'create', [config('instant.Controllers.User'),'store'])->name('user.store');
@@ -16,7 +16,7 @@ Route::group(['middleware' => ['web', 'auth_admin', 'can:access-admin-panel']], 
 
         // pat => personal access token
         Route::group(['prefix' => '{user}/pat'], function () {
-            Route::match(['get'], '', [config('instant.Controllers.PAT'),'index'])->name('pat');
+            Route::match(['get','post'], '', [config('instant.Controllers.PAT'),'index'])->name('pat');
             Route::match(['get'], 'create', [config('instant.Controllers.PAT'),'create'])->name('pat.create');
             Route::match(['post'], 'create', [config('instant.Controllers.PAT'),'store'])->name('pat.store');
             Route::match(['delete'], '{pat}/delete', [config('instant.Controllers.PAT'),'destroy'])->name('pat.destroy');
