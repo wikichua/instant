@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Rap2hpoutre\FastExcel\SheetCollection;
+use Illuminate\Support\Facades\Redirect;
 
 class ReportController extends Controller
 {
@@ -25,34 +26,33 @@ class ReportController extends Controller
                 $trail->push('Report Listing', route('report'));
             });
         }
+        inertia()->share('moduleName', 'Report Management');
     }
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $models = app(config('instant.Models.Report'))->query()
+        $can = [
+            'create' => auth()->user()->can('create-reports'),
+            'read' => auth()->user()->can('read-reports'),
+            'update' => auth()->user()->can('update-reports'),
+            'delete' => auth()->user()->can('delete-reports'),
+            'export' => auth()->user()->can('export-reports'),
+        ];
+        $models = app(config('instant.Models.Report'))->query()
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
-            ;
-            $paginated = $models->paginate($request->get('take', 25));
-            foreach ($paginated as $model) {
-                $model->cache_status = false == Cache::has('report-'.str_slug($model->name)) ? 'Processing' : 'Ready';
-                $model->actionsView = view('dashing::admin.report.actions', compact('model'))->render();
-            }
-            if ('' != $request->get('filters', '')) {
-                $paginated->appends(['filters' => $request->get('filters', '')]);
-            }
-            if ('' != $request->get('sort', '')) {
-                $paginated->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
-            }
-            $links = $paginated->onEachSide(5)->links()->render();
-            $currentUrl = $request->fullUrl();
-
-            return compact('paginated', 'links', 'currentUrl');
+                ->paginate($request->get('take', 25));
+        foreach ($models as $model) {
+            $model->cache_status = false == Cache::has('report-'.str_slug($model->name)) ? 'Processing' : 'Ready';
         }
-        $getUrl = route('report');
-        $html = [
+        if ('' != $request->get('filters', '')) {
+            $models->appends(['filters' => $request->get('filters', '')]);
+        }
+        if ('' != $request->get('sort', '')) {
+            $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
+        }
+        $columns = [
             ['title' => 'Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
             ['title' => 'Report Status', 'data' => 'cache_status', 'sortable' => false, 'filterable' => true],
@@ -61,7 +61,7 @@ class ReportController extends Controller
             ['title' => '', 'data' => 'actionsView'],
         ];
 
-        return view('dashing::admin.report.index', compact('html', 'getUrl'));
+        return inertia('Admin/Report/Index', compact('columns', 'models', 'can'));
     }
 
     public function create(Request $request)
@@ -71,7 +71,7 @@ class ReportController extends Controller
             $trail->push('Create Report');
         });
 
-        return view('dashing::admin.report.create');
+        return inertia('Admin/Report/Create');
     }
 
     public function store(Request $request)
@@ -97,13 +97,9 @@ class ReportController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return response()->json([
+        return Redirect::route('report.show', [$model->id], [
             'status' => 'success',
             'flash' => 'Report Created.',
-            'reload' => false,
-            'relist' => false,
-            // 'redirect' => route('report'),
-            'redirect' => route('report.show', [$model->id]),
         ]);
     }
 
@@ -125,7 +121,7 @@ class ReportController extends Controller
             return $models;
         });
         $report = $model;
-        return view('dashing::admin.report.show', compact('model', 'models', 'report'));
+        return inertia('Admin/Report/Show', compact('model', 'models', 'report'));
     }
 
     public function export($id)
@@ -154,7 +150,7 @@ class ReportController extends Controller
         });
         $model = app(config('instant.Models.Report'))->query()->with(['creator','modifier'])->findOrFail($id);
 
-        return view('dashing::admin.report.edit', compact('model'));
+        return inertia('Admin/Report/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -181,13 +177,9 @@ class ReportController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return response()->json([
+        return Redirect::route('report.edit', [$id], [
             'status' => 'success',
             'flash' => 'Report Updated.',
-            'reload' => false,
-            'relist' => false,
-            // 'redirect' => route('report.edit', [$model->id]),
-            'redirect' => route('report.show', [$model->id]),
         ]);
     }
 
@@ -204,12 +196,9 @@ class ReportController extends Controller
         ]);
         $model->delete();
 
-        return response()->json([
+        return Redirect::route('report', [
             'status' => 'success',
             'flash' => 'Report Deleted.',
-            'reload' => false,
-            'relist' => true,
-            'redirect' => false,
         ]);
     }
 }
