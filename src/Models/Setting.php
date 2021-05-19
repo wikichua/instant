@@ -61,7 +61,12 @@ class Setting extends Model
     {
         $value = $this->attributes['value'];
         if (isset($this->attributes['protected']) && 1 == $this->attributes['protected']) {
-            $value = decrypt($value);
+            try {
+                $value = decrypt(trim($value));
+            } catch (DecryptException $e) {
+            } finally {
+                $value = trim($value);
+            }
         }
         if (json_decode($value)) {
             return true;
@@ -74,7 +79,12 @@ class Setting extends Model
     {
         $value = $this->attributes['value'];
         if (isset($this->attributes['protected']) && 1 == $this->attributes['protected']) {
-            $value = decrypt($value);
+            try {
+                $value = decrypt(trim($value));
+            } catch (DecryptException $e) {
+            } finally {
+                $value = trim($value);
+            }
         }
         if (json_decode($value)) {
             $array = json_decode($value, true);
