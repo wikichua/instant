@@ -1,0 +1,22 @@
+<x-dashing::app-layout>
+    <x-slot name="header">
+        {%model_string%} Management - Edit
+    </x-slot>
+    <x-slot name="breadcrumb">
+        {{ \Breadcrumbs::render('breadcrumb') }}
+    </x-slot>
+    <x-dashing::content-card class="col-max">
+        <div class="px-5">
+            <x-dashing::form ajax="true" method="PATCH" action="{{ route('{%model_variable%}.update',[$model->id]) }}">
+                {%form_fields%}
+                <x-dashing::button-field class="btn btn-primary">Submit</x-dashing::button-field>
+            </x-dashing::form>
+        </div>
+    </x-dashing::content-card>
+@push('scripts')
+<script>
+    $(document).ready(function() {
+    });
+</script>
+@endpush
+</x-dashing::app-layout>

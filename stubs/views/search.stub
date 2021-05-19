@@ -1,0 +1,6 @@
+<x-dashing::filter-card>
+    <x-slot name="title">
+    Advanced Filter
+    </x-slot>
+    {%search_fields%}
+</x-dashing::filter-card>

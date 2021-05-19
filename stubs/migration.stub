@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class Dashing{%model%}Table extends Migration
+{
+    public function up()
+    {
+        cache()->tags(['fillable'])->flush();
+        Schema::create('{%table_name%}', function (Blueprint $table) {
+            $table->increments('id');
+            {%migration_codes%}
+            $table->integer('created_by')->nullable()->default(0);
+            $table->integer('updated_by')->nullable()->default(0);
+            $table->timestamps();
+            $table->softDeletes();
+            {%orderable_migration%}
+        });
+        $user_id = 1;
+
+        {%settings_options_up%}
+        app(config('instant.Models.Permission'))->createGroup('{%permission_string%}', ['create-{%permission_string%}', 'read-{%permission_string%}', 'update-{%permission_string%}', 'delete-{%permission_string%}'], $user_id);
+    }
+    public function down()
+    {
+        {%settings_options_down%}
+        app(config('instant.Models.Permission'))->where('group', '{%permission_string%}')->delete();
+        Schema::dropIfExists('{%table_name%}');
+    }
+}

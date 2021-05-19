@@ -1,0 +1,47 @@
+<?php
+
+namespace {%model_namespace%};
+
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Carbon;
+
+class {%model_class%} extends Eloquent
+{
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+    use \Wikichua\Instant\Http\Traits\AllModelTraits;
+
+    protected $menu_icon = '{%menu_icon%}';
+    protected $need_audit = true;
+    protected $snapshot = true;
+    protected $activity_name = '{%model_class%}';
+
+    protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'created_by',
+        'updated_by',
+        {%fillable_array%}
+    ];
+    {%table_declared%}
+
+    {%model_appends%}
+
+    {%searchable_fields%}
+
+    {%model_casts%}
+
+    {%relationships%}
+
+    {%user_timezones%}
+
+    {%mutators%}
+
+    {%search_scopes%}
+
+    public function getReadUrlAttribute($value)
+    {
+        if (\Route::has('{%model_variable%}.show')) {
+            return $this->readUrl = route('{%model_variable%}.show', $this->id);
+        }
+        return '';
+    }
+}

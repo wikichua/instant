@@ -1,0 +1,166 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class Dashing{%brand_name%}BrandSeed extends Migration
+{
+    public function up()
+    {
+        Schema::create('{%brand_string%}_users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+            $table->json('social')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('timezone')->default(config('app.timezone'))->index();
+            $table->integer('created_by')->nullable()->default(1);
+            $table->integer('updated_by')->nullable()->default(1);
+        });
+
+        $user_id = 1;
+
+        $brand = app(config('instant.Models.Brand'))->query()->create([
+            'name' => '{%brand_name%}',
+            'domain' => '{%domain%}',
+            'published_at' => \Carbon\Carbon::now(),
+            'expired_at' => \Carbon\Carbon::now()->addYear(),
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        \Cache::forget('brand-{%brand_name%}');
+
+        app(config('instant.Models.Component'))->query()->create([
+            'name' => 'NavbarTop',
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Component'))->query()->create([
+            'name' => 'NavbarTopLogin',
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Component'))->query()->create([
+            'name' => 'LoginModal',
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Component'))->query()->create([
+            'name' => 'Carousel',
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Component'))->query()->create([
+            'name' => 'Alert',
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Nav'))->query()->create([
+            'name' => 'Sample Page Nav',
+            'locale' => 'en',
+            'group_slug' => 'sample-navbar',
+            'route_slug' => 'sample-page',
+            'route_params' => [],
+            'brand_id' => $brand->id,
+            'status' => 'A',
+            'seq' => 1,
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+        app(config('instant.Models.Page'))->query()->create([
+            'name' => 'Sample Page',
+            'slug' => 'sample-page',
+            'locale' => 'en',
+            'styles' => [],
+            'scripts' => [],
+            'template' => 'layouts.main',
+            'brand_id' => $brand->id,
+            'blade' => '<p>This is a sample page.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>',
+            'published_at' => \Carbon\Carbon::now(),
+            'expired_at' => \Carbon\Carbon::now()->addYear(),
+            'status' => 'A',
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Carousel'))->query()->create([
+            'slug' => 'sample-carousel',
+            'brand_id' => $brand->id,
+            'image_url' => '//source.unsplash.com/random/800x600/?nature',
+            'caption' => 'Sample Carousel 1',
+            'published_at' => \Carbon\Carbon::now(),
+            'expired_at' => \Carbon\Carbon::now()->addYear(),
+            'status' => 'A',
+            'seq' => 1,
+            'tags' => ['new','hot'],
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Carousel'))->query()->create([
+            'slug' => 'sample-carousel',
+            'brand_id' => $brand->id,
+            'image_url' => '//source.unsplash.com/random/800x600/?water',
+            'caption' => 'Sample Carousel 2',
+            'published_at' => \Carbon\Carbon::now(),
+            'expired_at' => \Carbon\Carbon::now()->addYear(),
+            'status' => 'A',
+            'seq' => 1,
+            'tags' => ['new','hot'],
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+
+        app(config('instant.Models.Carousel'))->query()->create([
+            'slug' => 'sample-carousel',
+            'brand_id' => $brand->id,
+            'image_url' => '//source.unsplash.com/random/800x600/?sky',
+            'caption' => 'Sample Carousel 3',
+            'published_at' => \Carbon\Carbon::now(),
+            'expired_at' => \Carbon\Carbon::now()->addYear(),
+            'status' => 'A',
+            'seq' => 1,
+            'tags' => ['new','hot'],
+            'created_by' => $user_id,
+            'updated_by' => $user_id,
+        ]);
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('{%brand_string%}_users');
+        $brand = app(config('instant.Models.Brand'))->query()->where('name','{%brand_name%}')->first();
+        app(config('instant.Models.Component'))->query()->where('brand_id',$brand->id)->forceDelete();
+        app(config('instant.Models.Nav'))->query()->where('brand_id',$brand->id)->forceDelete();
+        app(config('instant.Models.Page'))->query()->where('brand_id',$brand->id)->forceDelete();
+        app(config('instant.Models.Carousel'))->query()->where('brand_id',$brand->id)->forceDelete();
+        $brand->forceDelete();
+    }
+}

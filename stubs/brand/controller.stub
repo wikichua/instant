@@ -1,0 +1,31 @@
+<?php
+
+namespace Brand\{%brand_name%}\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class {%brand_name%}Controller extends Controller
+{
+    use \Wikichua\Instant\Http\Traits\BrandControllerTrait;
+
+    protected $page_path = '{%brand_string%}::pages.';
+    protected $brand;
+    protected $supportedLocales = [
+        'en',
+    ];
+    public function __construct()
+    {
+        $this->register('{%brand_name%}')->setLocale();
+    }
+
+    public function index(Request $request, $locale = '', $slug = '')
+    {
+        if ($slug != '') {
+            $this->page($request, $locale, $slug);
+        }
+        $greetings = __('{%brand_string%}::locale.greeting').' '.$this->brand->name;
+        alert()->image($greetings, 'Thanks for using SAP by Wiki', 'https://source.unsplash.com/random/800x600?greetings', 800, 600, 'Alt Title');
+        return $this->getViewPage('index', compact('greetings'));
+    }
+}

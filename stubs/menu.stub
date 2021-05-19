@@ -1,0 +1,5 @@
+@can('read-{%permission_string%}')
+<x-dashing::nav-link :href="route('{%model_variable%}')" :active="request()->routeIs('{%model_variable%}')">
+    <i class="align-middle {%menu_icon%}"></i>  <span class="align-middle">{%menu_name%}</span>
+</x-dashing::nav-link>
+@endcan

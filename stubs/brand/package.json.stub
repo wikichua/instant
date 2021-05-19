@@ -1,0 +1,27 @@
+{
+  "name": "{%brand_name%}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.mix.js",
+  "scripts": {
+    "dev": "npm install --save; npm run development",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "npm install --save; npm run production",
+    "production": "mix --production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
+    "bootstrap": "^4.5.2",
+    "cross-env": "^7.0.2",
+    "jquery": "^3.5.1",
+    "laravel-mix": "^6.0.10",
+    "popper.js": "^1.12",
+    "postcss": "^8.2.4"
+  }
+}

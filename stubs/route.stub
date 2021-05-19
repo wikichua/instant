@@ -1,0 +1,16 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => ['web', 'auth_admin', 'can:access-admin-panel']], function () {
+    Route::group(['prefix' => '{%model_variable%}', 'as' => '{%route_as%}', 'namespace' => 'App\Http\Controllers\Admin'], function () {
+        Route::match(['get', 'head'], '', '{%model_class%}Controller@index')->name('{%model_variable%}');
+        Route::match(['get', 'head'], '{model}/read', '{%model_class%}Controller@show')->name('{%model_variable%}.show');
+        Route::match(['get', 'head'], 'create', '{%model_class%}Controller@create')->name('{%model_variable%}.create');
+        Route::match(['post'], 'store', '{%model_class%}Controller@store')->name('{%model_variable%}.store');
+        Route::match(['get', 'head'], '{model}/edit', '{%model_class%}Controller@edit')->name('{%model_variable%}.edit');
+        Route::match(['put', 'patch'], '{model}/update', '{%model_class%}Controller@update')->name('{%model_variable%}.update');
+        Route::match(['delete'], '{model}/delete', '{%model_class%}Controller@destroy')->name('{%model_variable%}.destroy');
+        {%orderable_routes%}
+    });
+});

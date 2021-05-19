@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::redirect('/', '/en');
+Route::name('{%brand_string%}.')
+    ->domain(getDomain('{%brand_name%}'))
+    ->namespace('\Brand\{%brand_name%}\Controllers')
+    ->group(function () {
+        Route::group(
+            [
+            'prefix'=>'{locale?}',
+            'middleware' => ['{%brand_string%}:guest'],
+            'where' => ['locale' => '[a-z]{2}']
+        ],
+            function () {
+                Route::name('page.')->group(function () {
+                    /* customized route */
+                    // customized, to exclude access to page method, need at least 2 paths
+                    // Route::get('/one', '{%brand_name%}Controller@example1')->name('example1');
+                    // Route::get('/one/two', '{%brand_name%}Controller@example2')->name('example2');
+                    /* customized route end */
+
+                    Route::get('/', '{%brand_name%}Controller@index')->name('home');
+                    Help::subPathRoutes('{%brand_name%}', '{%brand_name%}Controller@page');
+                });
+            }
+        );
+        Route::group(['prefix'=>'auth','middleware' => ['{%brand_string%}:guest']], function () {
+            Route::post('/login', 'LoginController@login')->name('login');
+            Route::match(['get','post'], 'login/{provider}', 'LoginController@redirectToProvider')->name('social.login');
+            Route::match(['get','post'], 'login/{provider}/callback', 'LoginController@handleProviderCallback')->name('social.callback');
+            Route::get('logout', 'LoginController@logout')->name('logout');
+        });
+        Route::group(['prefix'=>'auth','middleware' => ['{%brand_string%}:auth']], function () {
+            // Route::get('/', 'ProfileController@index')->name('profile');
+        });
+    });
