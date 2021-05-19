@@ -58,20 +58,23 @@
           <instant-nav-link :href="route('dashboard')" :active="route().current('admin')">
             Dashboard
           </instant-nav-link>
-          <instant-nav-link :href="route('user')" :active="route().current('admin.user')">
+          <instant-nav-link :href="route('user')" :active="route().current('user')">
             User
           </instant-nav-link>
-          <instant-nav-link :href="route('role')" :active="route().current('admin.role')">
+          <instant-nav-link :href="route('role')" :active="route().current('role')">
             Role
           </instant-nav-link>
-          <instant-nav-link :href="route('permission')" :active="route().current('admin.permission')">
+          <instant-nav-link :href="route('permission')" :active="route().current('permission')">
             Permission
           </instant-nav-link>
-          <instant-nav-link :href="route('setting')" :active="route().current('admin.setting')">
+          <instant-nav-link :href="route('setting')" :active="route().current('setting')">
             Setting
           </instant-nav-link>
-          <instant-nav-link :href="route('audit')" :active="route().current('admin.audit')">
+          <instant-nav-link :href="route('audit')" :active="route().current('audit')">
             Audit
+          </instant-nav-link>
+          <instant-nav-link :href="route('report')" :active="route().current('report')">
+            Report
           </instant-nav-link>
         </ul>
         <!-- <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
