@@ -17,7 +17,7 @@ class NavTable extends Migration
             $table->string('group_slug')->nullable()->default('');
             $table->string('icon')->nullable()->default('');
             $table->string('route_slug')->nullable()->default('');
-            $table->json('route_params')->nullable()->default('');
+            $table->json('route_params')->nullable();
             $table->integer('seq')->default(1);
             $table->string('status', 1)->nullable()->default('A');
             $table->integer('created_by')->nullable()->default(0);
