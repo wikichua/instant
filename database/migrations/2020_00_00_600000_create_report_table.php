@@ -12,7 +12,7 @@ class CreateReportTable extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable()->default('')->unique();
-            $table->json('queries')->nullable()->default('');
+            $table->json('queries')->nullable();
             $table->string('status', 1)->nullable()->default('');
             $table->integer('created_by')->nullable()->default(0);
             $table->integer('updated_by')->nullable()->default(0);
