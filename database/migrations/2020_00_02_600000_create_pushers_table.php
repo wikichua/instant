@@ -17,7 +17,7 @@ class CreatePushersTable extends Migration
             $table->string('title')->nullable()->default('');
             $table->string('link')->nullable()->default('');
             $table->string('icon')->nullable()->default('');
-            $table->text('message')->nullable()->default('');
+            $table->text('message')->nullable();
             $table->integer('timeout')->nullable()->default(5000);
             $table->datetime('scheduled_at')->nullable();
             $table->timestamps();

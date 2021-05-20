@@ -15,8 +15,8 @@ class PageTable extends Migration
             $table->string('locale', 2)->nullable()->default('en');
             $table->string('name')->nullable()->default('');
             $table->string('template')->nullable()->default('layouts.main');
-            $table->text('slug')->nullable()->default('');
-            $table->longText('blade')->nullable()->default('');
+            $table->text('slug')->nullable();
+            $table->longText('blade')->nullable();
             $table->json('styles')->nullable();
             $table->json('scripts')->nullable();
             $table->date('published_at')->nullable();
