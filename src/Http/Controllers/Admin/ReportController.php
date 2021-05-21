@@ -44,7 +44,10 @@ class ReportController extends Controller
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
                 ->paginate($request->get('take', 25));
         foreach ($models as $model) {
-            $model->cache_status = false == Cache::has('report-'.str_slug($model->name)) ? 'Processing' : 'Ready';
+            $model->cache_status = 'Ready';
+            if (config('cache.default') != 'array') {
+                $model->cache_status = false == Cache::has('report-'.str_slug($model->name)) ? 'Processing' : 'Ready';
+            }
         }
         if ('' != $request->get('filters', '')) {
             $models->appends(['filters' => $request->get('filters', '')]);
