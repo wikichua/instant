@@ -110,23 +110,27 @@ class ReportController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('home', function ($trail) {
+        \Breadcrumbs::for('breadcrumb', function ($trail) {
             $trail->parent('home');
             $trail->push('Show Report');
         });
         $models = [];
         $model = app(config('instant.Models.Report'))->query()->with(['creator','modifier'])->findOrFail($id);
         $models = Cache::get('report-'.str_slug($model->name), function () use ($model, $models) {
-            foreach ($model->queries as $sql) {
-                $models[] = array_map(function ($value) {
+            $results = [];
+            foreach ($model->queries as $key => $sql) {
+                $results[$key]['sql'] = $sql;
+                $results[$key]['data'] = array_map(function ($value) {
                     return (array) $value;
                 }, \DB::select($sql));
+                $columns = array_keys($results[$key]['data'][0]);
+                $results[$key]['columns'] = array_map(function ($value) {
+                    return ['title' => $value, 'data' => $value];
+                }, array_keys($results[$key]['data'][0]));
             }
-
-            return $models;
+            return $results;
         });
-        $report = $model;
-        return inertia('Admin/Report/Show', compact('model', 'models', 'report'));
+        return inertia('Admin/Report/Show', compact('model', 'models'));
     }
 
     public function export($id)

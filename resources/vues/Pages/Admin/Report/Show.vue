@@ -1,7 +1,7 @@
 <template>
     <authenticated-layout>
         <template #page-title>
-            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('permission')">
+            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('report')">
                 {{ $page.props.moduleName }}
             </inertia-link>
         </template>
@@ -10,8 +10,7 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-input-field label="Group" :form="form" objprop="group" id="group" disabled/>
-                <instant-multi-rows-input-field label="Permissions" :form="form" objprop="name" id="name" disabled/>
+                <instant-content-tabs :models="models" />
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />
@@ -20,10 +19,12 @@
 
 <script>
     import AuthenticatedLayout from '@/Layouts/Authenticated'
+    import InstantContentTabs from '@/Pages/Admin/Report/ContentTabs'
 
     export default {
         components: {
             AuthenticatedLayout,
+            InstantContentTabs,
         },
 
         data() {
@@ -37,7 +38,6 @@
             errors: Object,
             model: Object,
             models: Object,
-            report: Object,
         },
 
         methods: {
