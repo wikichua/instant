@@ -3,6 +3,7 @@
         <form @submit.prevent="onDelete(model.id)" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="$page.props.can.delete">
             <instant-delete-link class="text-indigo-600 hover:text-indigo-900 inline-block" />
         </form>
+        <instant-delete-link :href="route('pat.destroy',[$page.props.user_id, model.id])" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="$page.props.can.delete"/>
     </div>
 </template>
 
@@ -15,15 +16,6 @@ export default {
         return {
             form: this.$inertia.form()
         }
-    },
-    methods: {
-        onDelete(id) {
-            if (confirm('Do you wish to continue remove this?')) {
-                this.form.delete(this.route('pat.destroy',[this.$page.props.user_id, id]), {
-                    // onFinish: () => this.form.reset(['group','permissions']),
-                });
-            }
-        },
     },
 }
 </script>
