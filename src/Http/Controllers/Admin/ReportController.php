@@ -151,7 +151,7 @@ class ReportController extends Controller
         });
         $sheets = new SheetCollection($models);
 
-        return fastexcel()->data($sheets)->download(\Str::studly($model->name).'.xlsx');
+        return fastexcel()->data($sheets)->download(\Str::slug($model->name).'.xlsx');
     }
 
     public function edit(Request $request, $id)
