@@ -52,9 +52,14 @@ class Cronjob extends Eloquent
         return settings('cronjob_status')[$this->attributes['status']] ?? 'P';
     }
 
+    public function getOutputAttribute($value)
+    {
+        return is_array($value)? $value:[];
+    }
+
     public function getReadUrlAttribute($value)
     {
-        return $this->readUrl = route('carousel.show', $this->id);
+        return $this->readUrl = isset($this->id)? route('cronjob.show', $this->id):null;
     }
 
     public function onCachedEvent()

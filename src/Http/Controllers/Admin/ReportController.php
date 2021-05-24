@@ -73,12 +73,7 @@ class ReportController extends Controller
             $trail->parent('home');
             $trail->push('Create Report');
         });
-
-        $status = [];
-        foreach (settings('report_status') as $value => $label) {
-            $status[] = ['value' => $value, 'label' => $label];
-        }
-
+        $this->shareData();
         return inertia('Admin/Report/Create', compact('status'));
     }
 
@@ -161,13 +156,8 @@ class ReportController extends Controller
             $trail->push('Edit Report');
         });
         $model = app(config('instant.Models.Report'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        $status = [];
-        foreach (settings('report_status') as $value => $label) {
-            $status[] = ['value' => $value, 'label' => $label];
-        }
-
-        return inertia('Admin/Report/Edit', compact('model', 'status'));
+        $this->shareData();
+        return inertia('Admin/Report/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -217,5 +207,14 @@ class ReportController extends Controller
             'status' => 'success',
             'flash' => 'Report Deleted.',
         ]);
+    }
+
+    protected function shareData()
+    {
+        $status = [];
+        foreach (settings('report_status') as $value => $label) {
+            $status[] = compact('value', 'label');
+        }
+        return inertia()->share(compact('status'));
     }
 }

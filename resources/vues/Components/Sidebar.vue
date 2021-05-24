@@ -76,6 +76,9 @@
           <instant-nav-link :href="route('report')" :active="route().current('report')">
             Report
           </instant-nav-link>
+          <instant-nav-link :href="route('cronjob')" :active="route().current('cronjob')">
+            Cronjob
+          </instant-nav-link>
         </ul>
         <!-- <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
           Documentation

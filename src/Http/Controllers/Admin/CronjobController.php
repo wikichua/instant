@@ -2,8 +2,9 @@
 
 namespace Wikichua\Instant\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CronjobController extends Controller
 {
@@ -22,34 +23,32 @@ class CronjobController extends Controller
                 $trail->push('Cron Jobs Listing', route('cronjob'));
             });
         }
+        inertia()->share('moduleName', 'Cronjob Management');
     }
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $models = app(config('instant.Models.Cronjob'))->query()
+        $can = [
+            'create' => auth()->user()->can('create-cronjobs'),
+            'read' => auth()->user()->can('read-cronjobs'),
+            'update' => auth()->user()->can('update-cronjobs'),
+            'delete' => auth()->user()->can('delete-cronjobs'),
+        ];
+        $models = app(config('instant.Models.Cronjob'))->query()
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
-            ;
-            $paginated = $models->paginate($request->get('take', 25));
-            foreach ($paginated as $model) {
-                $model->actionsView = view('dashing::admin.cronjob.actions', compact('model'))->render();
-                $model->last_run_date = collect(array_keys($model->output))->first();
-            }
-            if ('' != $request->get('filters', '')) {
-                $paginated->appends(['filters' => $request->get('filters', '')]);
-            }
-            if ('' != $request->get('sort', '')) {
-                $paginated->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
-            }
-            $links = $paginated->onEachSide(5)->links()->render();
-            $currentUrl = $request->fullUrl();
-
-            return compact('paginated', 'links', 'currentUrl');
+                ->paginate($request->get('take', 25));
+        foreach ($models as $model) {
+            $model->last_run_date = collect(array_keys($model->output))->first();
         }
-        $getUrl = route('cronjob');
-        $html = [
+        if ('' != $request->get('filters', '')) {
+            $models->appends(['filters' => $request->get('filters', '')]);
+        }
+        if ('' != $request->get('sort', '')) {
+            $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
+        }
+        $columns = [
             ['title' => 'Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Timezone', 'data' => 'timezone', 'sortable' => false, 'filterable' => true],
             ['title' => 'Frequency', 'data' => 'frequency', 'sortable' => false, 'filterable' => true],
@@ -59,7 +58,7 @@ class CronjobController extends Controller
             ['title' => '', 'data' => 'actionsView'],
         ];
 
-        return view('dashing::admin.cronjob.index', compact('html', 'getUrl'));
+        return inertia('Admin/Cronjob/Index', compact('columns', 'models', 'can'));
     }
 
     public function create(Request $request)
@@ -68,8 +67,8 @@ class CronjobController extends Controller
             $trail->parent('home');
             $trail->push('Create Cron Job');
         });
-
-        return view('dashing::admin.cronjob.create');
+        $this->shareData();
+        return inertia('Admin/Cronjob/Create');
     }
 
     public function store(Request $request)
@@ -86,12 +85,9 @@ class CronjobController extends Controller
 
         $model = app(config('instant.Models.Cronjob'))->create($request->all());
 
-        return response()->json([
+        return Redirect::route('cronjob')->with([
             'status' => 'success',
             'flash' => 'Cronjob Created.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('cronjob'),
         ]);
     }
 
@@ -102,8 +98,8 @@ class CronjobController extends Controller
             $trail->push('Show Cron Job');
         });
         $model = app(config('instant.Models.Cronjob'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return view('dashing::admin.cronjob.show', compact('model'));
+        $this->shareData();
+        return inertia('Admin/Cronjob/Show', compact('model'));
     }
 
     public function edit(Request $request, $id)
@@ -113,8 +109,8 @@ class CronjobController extends Controller
             $trail->push('Edit Cron Job');
         });
         $model = app(config('instant.Models.Cronjob'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return view('dashing::admin.cronjob.edit', compact('model'));
+        $this->shareData();
+        return inertia('Admin/Cronjob/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -132,12 +128,9 @@ class CronjobController extends Controller
 
         $model->update($request->all());
 
-        return response()->json([
+        return Redirect::route('cronjob.edit', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Cronjob Updated.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('cronjob.edit', [$model->id]),
         ]);
     }
 
@@ -146,12 +139,26 @@ class CronjobController extends Controller
         $model = app(config('instant.Models.Cronjob'))->query()->with(['creator','modifier'])->findOrFail($id);
         $model->delete();
 
-        return response()->json([
+        return Redirect::route('cronjob')->with([
             'status' => 'success',
-            'flash' => 'Cronjob Deleted.',
-            'reload' => false,
-            'relist' => true,
-            'redirect' => false,
+            'flash' => 'Cronjob Deleted.'
         ]);
+    }
+
+    protected function shareData()
+    {
+        $timezones = [];
+        foreach (timezones() as $value => $label) {
+            $timezones[] = compact('value', 'label');
+        }
+        $cronjob_frequencies = [];
+        foreach (cronjob_frequencies() as $value => $label) {
+            $cronjob_frequencies[] = compact('value', 'label');
+        }
+        $cronjob_status = [];
+        foreach (settings('cronjob_status') as $value => $label) {
+            $cronjob_status[] = compact('value', 'label');
+        }
+        return inertia()->share(compact('timezones', 'cronjob_frequencies', 'cronjob_status'));
     }
 }
