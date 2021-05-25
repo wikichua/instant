@@ -86,7 +86,7 @@
                 input.setAttribute("value", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                 event.target.appendChild(input);
                 event.target.method = 'post';
-                event.target.action = route('logviewer',[this.data['current_folder'],this.data['current_file']]);
+                event.target.action = route('logviewer.download',[this.data['current_folder'],this.data['current_file']]);
                 event.target.submit();
             },
             onDelete(event) {
@@ -101,7 +101,7 @@
                 input.setAttribute("value", 'delete');
                 event.target.appendChild(input);
                 event.target.method = 'post';
-                event.target.action = route('logviewer',[this.data['current_folder'],this.data['current_file']]);
+                event.target.action = route('logviewer.delete',[this.data['current_folder'],this.data['current_file']]);
                 event.target.submit();
             }
         },
