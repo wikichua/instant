@@ -40,6 +40,14 @@
         </instant-content-card>
         <instant-content-card class="w-full xl:w-10/12 items-center">
             <template #content-title>Logs</template>
+            <template #content-actions>
+                <form @submit.prevent="onDownload($event)" class="justify-center rounded-sm text-sm mb-4 inline-flex" role="group" style="transition:all .15s ease" v-if="can.download && data['current_file'] != ''">
+                    <button class="font-bold bg-indigo-500 text-white hover:bg-indigo-400 px-4 py-2 mx-0 outline-none focus:shadow-outline">Download</button>
+                </form>
+                <form @submit.prevent="onDelete($event)" class="justify-center rounded-sm text-sm mb-4 inline-flex" role="group" style="transition:all .15s ease" v-if="can.delete">
+                    <button class="font-bold bg-indigo-500 text-white hover:bg-red-400 px-4 py-2 mx-0 outline-none focus:shadow-outline">Delete</button>
+                </form>
+            </template>
             <datatable :models="data['logs']" :columns="columns">
             </datatable>
         </instant-content-card>
@@ -71,7 +79,31 @@
             }
         },
         methods: {
-
+            onDownload(event) {
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "_token");
+                input.setAttribute("value", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                event.target.appendChild(input);
+                event.target.method = 'post';
+                event.target.action = route('logviewer',[this.data['current_folder'],this.data['current_file']]);
+                event.target.submit();
+            },
+            onDelete(event) {
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "_token");
+                input.setAttribute("value", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                event.target.appendChild(input);
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "_method");
+                input.setAttribute("value", 'delete');
+                event.target.appendChild(input);
+                event.target.method = 'post';
+                event.target.action = route('logviewer',[this.data['current_folder'],this.data['current_file']]);
+                event.target.submit();
+            }
         },
     }
 </script>

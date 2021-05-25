@@ -4,6 +4,8 @@ namespace Wikichua\Instant\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 use Rap2hpoutre\LaravelLogViewer\LaravelLogViewer;
 
 class LogViewerController extends Controller
@@ -13,6 +15,7 @@ class LogViewerController extends Controller
         $this->middleware(['auth_admin', 'can:access-admin-panel']);
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-log-viewer')->only(['index', 'read']);
+        $this->middleware('can:download-log-viewer')->only(['index', 'download']);
         $this->log_viewer = new LaravelLogViewer();
         $this->request = app('request');
         inertia()->share('moduleName', 'Log viewer');
@@ -53,7 +56,7 @@ class LogViewerController extends Controller
         $data = [
             'logs' => ['data' => $logs],
             'folders' => $this->log_viewer->getFolders(),
-            'current_folder' => $this->log_viewer->getFolderName(),
+            'current_folder' => $this->log_viewer->getFolderName() ?? 'root',
             'folder_files' => $folderFiles,
             'files' => $this->log_viewer->getFiles(true),
             'current_file' => $this->log_viewer->getFileName(),
@@ -66,5 +69,21 @@ class LogViewerController extends Controller
             ['title' => 'Content', 'data' => 'content', 'class' => 'align-top text-left'],
         ];
         return inertia('Admin/LogViewer/Index', compact('can', 'data', 'columns'));
+    }
+    public function download($folder = 'root', $file = '')
+    {
+        $folder = $folder != 'root'? $folder.'/':'';
+        $path = storage_path('logs/'.$folder.$file);
+        return response()->download($path);
+    }
+    public function destroy($folder = 'root', $file = '')
+    {
+        $folder = $folder != 'root'? $folder.'/':'';
+        $path = storage_path('logs/'.$folder.$file);
+        File::delete($path);
+        return Redirect::back()->with([
+            'status' => 'success',
+            'flash' => 'Log Deleted'
+        ]);
     }
 }
