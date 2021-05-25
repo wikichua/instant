@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Report extends Command
 {
-    protected $signature = 'instant:run:report {name?} {--method=async} {--clearcache}';
+    protected $signature = 'instant:run:report {name?} {--queue} {--clearcache}';
     protected $description = 'Generating Report';
 
     public function __construct()
@@ -18,7 +18,7 @@ class Report extends Command
     public function handle()
     {
         $name = $this->argument('name', '');
-        $method = $this->option('method');
+        $queue = $this->option('queue');
         $clearcache = $this->option('clearcache');
         $reports = app(config('instant.Models.Report'))->query()->where('status', 'A');
         if ('' != $name) {
@@ -26,30 +26,23 @@ class Report extends Command
         }
         $reports = $reports->get();
         foreach ($reports as $report) {
+            if ($clearcache) {
+                cache()->forget('report-'.str_slug($report->name));
+            }
             if (null == Cache::get('report-'.str_slug($report->name))) {
-                switch ($method) {
-                    case 'queue':
-                        $this->queue($report, $clearcache);
-
-                        break;
-
-                    default:
-                        $this->sync($report, $clearcache);
-
-                        break;
+                if ($queue) {
+                    $this->queue($report);
+                } else {
+                    $this->sync($report);
                 }
             }
         }
-        cache()->flush();
     }
 
-    protected function queue($report, $clearcache)
+    protected function queue($report)
     {
         // https://laravel.com/docs/8.x/queues#supervisor-configuration
         // art queue:work --queue=report_processing
-        if ($clearcache) {
-            cache()->forget('report-'.str_slug($report->name));
-        }
         dispatch(function () use ($report) {
             cache()->remember(
                 'report-'.str_slug($report->name),
@@ -78,11 +71,8 @@ class Report extends Command
         })->onQueue('report_processing');
     }
 
-    protected function sync($report, $clearcache)
+    protected function sync($report)
     {
-        if ($clearcache) {
-            cache()->forget('report-'.str_slug($report->name));
-        }
         cache()->remember(
             'report-'.str_slug($report->name),
             $report->cache_ttl,
@@ -103,6 +93,7 @@ class Report extends Command
                         $bar->advance();
                     }
                     $bar->finish();
+                    $this->newLine();
                 }
 
                 $report->generated_at = \Carbon\Carbon::now();
