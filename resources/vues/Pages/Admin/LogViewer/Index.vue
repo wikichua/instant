@@ -31,19 +31,21 @@
         </instant-content-card>
         <instant-content-card class="w-full xl:w-10/12 items-center">
             <template #content-title>Logs</template>
-            <instant-datatable :models="data['logs']" :columns="columns">
-            </instant-datatable>
+            <datatable :models="data['logs']" :columns="columns">
+            </datatable>
         </instant-content-card>
     </authenticated-layout>
 </template>
 
 <script>
     import AuthenticatedLayout from '@/Layouts/Authenticated'
+    import Datatable from '@/Pages/Admin/LogViewer/Datatable'
     import { reactive } from 'vue'
 
     export default {
         components: {
             AuthenticatedLayout,
+            Datatable,
         },
         props: {
             auth: Object,
@@ -60,6 +62,7 @@
             }
         },
         methods: {
+
         },
     }
 </script>

@@ -36,9 +36,20 @@ class LogViewerController extends Controller
         }
 
         $logs = $this->log_viewer->all();
-        // foreach ($logs as $log) {
-        //     $log[]
-        // }
+        $colors = [
+            'error' => 'red',
+            'info' => 'blue',
+            'warning' => 'yellow',
+        ];
+        foreach ($logs as $key => &$log) {
+            if (isset($log['level']) && $log['level'] != '') {
+                $log['level'] = '<div class="text-'.$colors[$log['level']].'-800 capitalize">'.$log['level'].'</div>';
+                $log['content'] = $log['text'];
+                $log['subcontent'] = nl2br($log['stack']);
+            } else {
+                unset($logs[$key]);
+            }
+        }
         $data = [
             'logs' => ['data' => $logs],
             'folders' => $this->log_viewer->getFolders(),
@@ -50,10 +61,9 @@ class LogViewerController extends Controller
         ];
 
         $columns = [
-            ['title' => 'Level', 'data' => 'level'],
-            ['title' => 'Context', 'data' => 'context'],
-            ['title' => 'Date', 'data' => 'date', 'class' => 'whitespace-nowrap'],
-            ['title' => 'Content', 'data' => 'text', 'class' => 'text-left'],
+            ['title' => 'Level', 'data' => 'level', 'class' => 'align-top'],
+            ['title' => 'Date', 'data' => 'date', 'class' => 'align-top whitespace-nowrap'],
+            ['title' => 'Content', 'data' => 'content', 'class' => 'align-top text-left'],
         ];
         return inertia('Admin/LogViewer/Index', compact('can', 'data', 'columns'));
     }
