@@ -46,7 +46,6 @@ class AuditController extends Controller
             ['title' => 'Message', 'data' => 'message'],
             ['title' => '', 'data' => 'actionsView'],
         ];
-
         return inertia('Admin/Audit/Index', compact('columns', 'can', 'models'));
     }
 
