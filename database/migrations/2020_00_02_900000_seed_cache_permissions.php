@@ -8,12 +8,12 @@ class SeedCachePermissions extends Migration
 {
     public function up()
     {
-        app(config('dashing.Models.Permission'))->createGroup('Caches', ['Read Caches', 'Delete Caches'], 1);
+        app(config('instant.Models.Permission'))->createGroup('Caches', ['Read Caches', 'Delete Caches'], 1);
     }
 
     public function down()
     {
-        app(config('dashing.Models.Permission'))->whereIn('group', [
+        app(config('instant.Models.Permission'))->whereIn('group', [
             'Versionizers',
         ])->delete();
     }
