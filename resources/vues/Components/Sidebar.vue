@@ -49,100 +49,12 @@
             <input type="text" placeholder="Search" class="border-0 px-3 py-2 h-12 border border-solid  border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"/>
           </div>
         </form>
-        <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-          Adminstrative
-        </h6>
-        <hr class="my-4 md:min-w-full" />
         <!-- Navigation -->
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none justify-center">
-          <instant-nav-link :href="route('dashboard')" :active="route().current('admin')">
-            Dashboard
-          </instant-nav-link>
-          <instant-nav-link :href="route('user')" :active="route().current('user')">
-            User
-          </instant-nav-link>
-          <instant-nav-link :href="route('role')" :active="route().current('role')">
-            Role
-          </instant-nav-link>
-          <instant-nav-link :href="route('permission')" :active="route().current('permission')">
-            Permission
-          </instant-nav-link>
-          <instant-nav-link :href="route('setting')" :active="route().current('setting')">
-            Setting
-          </instant-nav-link>
-          <instant-nav-link :href="route('audit')" :active="route().current('audit')">
-            Audit
-          </instant-nav-link>
-          <instant-nav-link :href="route('report')" :active="route().current('report')">
-            Report
-          </instant-nav-link>
-          <instant-nav-link :href="route('cronjob')" :active="route().current('cronjob')">
-            Cronjob
-          </instant-nav-link>
-          <instant-nav-link :href="route('logviewer')" :active="route().current('logviewer')">
-            Log Viewer
-          </instant-nav-link>
-          <instant-nav-link :href="route('failedjob')" :active="route().current('failedjob')">
-            Failed Job
-          </instant-nav-link>
-        </ul>
-        <!-- <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-          Documentation
-        </h6> -->
-        <!-- <hr class="my-4 md:min-w-full" /> -->
-        <!-- Navigation -->
-        <!-- <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/styles"
-              ><i
-                class="fas fa-paint-brush mr-2 text-blueGray-400 text-base"
-              ></i>
-              Styles</a
-            >
-          </li>
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/alerts"
-              ><i class="fab fa-css3-alt mr-2 text-blueGray-400 text-base"></i>
-              CSS Components</a
-            >
-          </li>
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/vue/alerts"
-              ><i class="fab fa-vuejs mr-2 text-blueGray-400 text-base"></i>
-              VueJS</a
-            >
-          </li>
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500  text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/react/alerts"
-              ><i class="fab fa-react mr-2 text-blueGray-400 text-base"></i>
-              React</a
-            >
-          </li>
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500  text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/angular/alerts"
-              ><i class="fab fa-angular mr-2 text-blueGray-400 text-base"></i>
-              Angular</a
-            >
-          </li>
-          <li class="inline-flex">
-            <a
-              class="text-blueGray-700 hover:text-blueGray-500  text-sm block mb-4 no-underline font-semibold"
-              href="#/documentation/javascript/alerts"
-              ><i class="fab fa-js-square mr-2 text-blueGray-400 text-base"></i>
-              Javascript</a
-            >
-          </li>
-        </ul> -->
+        <instant-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+          Dashboard
+        </instant-nav-link>
+        <instant-sidebar-system />
+        <instant-sidebar-admin />
       </div>
     </div>
   </nav>
