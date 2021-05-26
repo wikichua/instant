@@ -82,6 +82,9 @@
           <instant-nav-link :href="route('logviewer')" :active="route().current('logviewer')">
             Log Viewer
           </instant-nav-link>
+          <instant-nav-link :href="route('failedjob')" :active="route().current('failedjob')">
+            Failed Job
+          </instant-nav-link>
         </ul>
         <!-- <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
           Documentation

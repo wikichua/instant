@@ -39,12 +39,12 @@ class AuditController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Created At', 'data' => 'created_at', 'sortable' => true],
-            ['title' => 'User', 'data' => 'user.name', 'sortable' => true],
-            ['title' => 'Model ID', 'data' => 'model_id', 'sortable' => true],
-            ['title' => 'Model', 'data' => 'model_class', 'sortable' => true],
-            ['title' => 'Message', 'data' => 'message'],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Created At', 'data' => 'created_at', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'User', 'data' => 'user.name', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Model ID', 'data' => 'model_id', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Model', 'data' => 'model_class', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Message', 'data' => 'message', 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
         return inertia('Admin/Audit/Index', compact('columns', 'can', 'models'));
     }

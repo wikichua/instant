@@ -57,10 +57,10 @@ class PageController extends Controller
             ['title' => 'Locale', 'data' => 'locale', 'sortable' => true],
             ['title' => 'Slug', 'data' => 'slug', 'sortable' => true],
             ['title' => 'Template', 'data' => 'template', 'sortable' => true],
-            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false],
+            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false],
+            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

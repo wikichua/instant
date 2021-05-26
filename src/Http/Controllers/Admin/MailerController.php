@@ -47,10 +47,10 @@ class MailerController extends Controller
         }
         $getUrl = route('mailer');
         $html = [
-            ['title' => 'Mailable', 'data' => 'mailable', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Subject', 'data' => 'subject', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Available Params', 'data' => 'parameters', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Mailable', 'data' => 'mailable', 'sortable' => false],
+            ['title' => 'Subject', 'data' => 'subject', 'sortable' => false],
+            ['title' => 'Available Params', 'data' => 'parameters', 'sortable' => false],
+            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

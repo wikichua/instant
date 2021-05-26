@@ -14,7 +14,6 @@
             return {
                 form: this.$inertia.form({
                     filters: {
-                        group: [''],
                         name: '',
                         created_at: '',
                     },

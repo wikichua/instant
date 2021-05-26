@@ -58,14 +58,15 @@ class UserController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
-            ['title' => 'Email', 'data' => 'email', 'sortable' => true],
-            ['title' => 'Type', 'data' => 'type', 'sortable' => true],
-            ['title' => 'Brand', 'data' => 'brand_name', 'sortable' => false],
-            ['title' => 'Timezone', 'data' => 'timezone', 'sortable' => true],
-            ['title' => 'Roles', 'data' => 'roles_string'],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Name', 'data' => 'name', 'class' => 'text-left', 'sortable' => true],
+            ['title' => 'Email', 'data' => 'email', 'class' => 'text-left', 'sortable' => true],
+            ['title' => 'Type', 'data' => 'type', 'class' => 'text-left', 'sortable' => true],
+            ['title' => 'Brand', 'data' => 'brand_name', 'class' => 'text-left', 'sortable' => false],
+            ['title' => 'Timezone', 'data' => 'timezone', 'class' => 'text-left', 'sortable' => true],
+            ['title' => 'Roles', 'data' => 'roles_string', 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
+        $this->shareData();
         return inertia('Admin/User/Index', compact('columns', 'models', 'can'));
     }
 
@@ -75,7 +76,8 @@ class UserController extends Controller
             $trail->parent('home');
             $trail->push('Create User');
         });
-        return inertia('Admin/User/Create', $this->getPropsData());
+        $this->shareData();
+        return inertia('Admin/User/Create');
     }
 
     public function store(Request $request)
@@ -126,7 +128,8 @@ class UserController extends Controller
             'message' => $last_activity->message ?? '',
             'iplocation' => $last_activity->iplocation ?? '',
         ];
-        return inertia('Admin/User/Show', compact('model') + $this->getPropsData($model));
+        $this->shareData($model);
+        return inertia('Admin/User/Show', compact('model'));
     }
 
     public function edit(Request $request, $id)
@@ -136,7 +139,8 @@ class UserController extends Controller
             $trail->push('Edit User');
         });
         $model = app(config('instant.Models.User'))->query()->with(['creator','modifier'])->findOrFail($id);
-        return inertia('Admin/User/Edit', compact('model') + $this->getPropsData($model));
+        $this->shareData($model);
+        return inertia('Admin/User/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -227,7 +231,7 @@ class UserController extends Controller
         ]);
     }
 
-    private function getPropsData($model = null)
+    private function shareData($model = null)
     {
         $user_roles = null;
         if ($model) {
@@ -237,6 +241,10 @@ class UserController extends Controller
         $brands = [['label' => 'System', 'value' => 0]] + app(config('instant.Models.Brand'))->select(['name as label','id as value'])->get()->toArray();
         $timezones = timezones();
         $user_types = settings('user_types');
-        return compact('roles', 'brands', 'timezones', 'user_types', 'user_roles');
+        $status = [];
+        foreach (settings('report_status') as $value => $label) {
+            $status[] = compact('value', 'label');
+        }
+        return inertia()->share(compact('roles', 'brands', 'timezones', 'user_types', 'user_roles', 'status'));
     }
 }

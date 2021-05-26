@@ -37,6 +37,9 @@ class Role extends Model
 
     public function scopeFilterAdmin($query, $search)
     {
+        if ($search == '') {
+            return $query;
+        }
         return $query->where('admin', $search);
     }
 

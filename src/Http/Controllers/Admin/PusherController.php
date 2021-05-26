@@ -55,9 +55,9 @@ class PusherController extends Controller
             ['title' => 'Title', 'data' => 'title', 'sortable' => true],
             ['title' => 'Locale', 'data' => 'locale', 'sortable' => true],
             ['title' => 'Event', 'data' => 'event_name', 'sortable' => true],
-            ['title' => 'Scheduled Date', 'data' => 'scheduled_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Scheduled Date', 'data' => 'scheduled_at', 'sortable' => false],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false],
+            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

@@ -1,11 +1,9 @@
 <template>
     <form @submit.prevent="onSearch" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
-status
-            <instant-date-range-field label="Created At" :form="form.filters" objprop="created_at" id="created_at"/>
-            <instant-input-field label="Name" :form="form.filters" objprop="name" id="name"/>
-            <instant-input-field label="Email" :form="form.filters" objprop="email" id="email"/>
-            <instant-select-field label="Status" :form="form.filters" objprop="status" id="status" :options="$page.props.status" tags/>
+            <instant-date-range-field label="Failed At" :form="form.filters" objprop="failed_at" id="failed_at"/>
+            <instant-input-field label="Queue" :form="form.filters" objprop="queue" id="queue" type="text"/>
+            <instant-input-field label="Exception" :form="form.filters" objprop="exception" id="exception" type="text"/>
             <instant-button-field>filter</instant-button-field>
         </div>
     </form>
@@ -17,17 +15,16 @@ status
             return {
                 form: this.$inertia.form({
                     filters: {
-                        created_at: '',
-                        status: [''],
-                        email: '',
-                        name: '',
+                        failed_at: '',
+                        queue: '',
+                        exception: '',
                     },
                 })
             }
         },
         methods: {
             onSearch() {
-                this.form.post(this.route('user'), {
+                this.form.post(this.route('setting'), {
                     replace: true,
                     preserveState: true,
                     preserveScroll: false,

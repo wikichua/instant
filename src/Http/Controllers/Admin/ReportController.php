@@ -56,14 +56,14 @@ class ReportController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Report Status', 'data' => 'cache_status', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Last Run', 'data' => 'generated_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Next Run', 'data' => 'next_generate_at', 'sortable' => false, 'filterable' => true],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Name', 'data' => 'name', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Report Status', 'data' => 'cache_status', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Last Run', 'data' => 'generated_at', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Next Run', 'data' => 'next_generate_at', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
-
+        $this->shareData();
         return inertia('Admin/Report/Index', compact('columns', 'models', 'can'));
     }
 

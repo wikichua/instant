@@ -48,7 +48,7 @@ class ComponentController extends Controller
         }
         $getUrl = route('component');
         $html = [
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true, 'filterable' => true],
+            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Brand', 'data' => 'brand.name', 'sortable' => false, 'filterable' => false],
             ['title' => 'Usage Example', 'data' => 'usage', 'sortable' => false, 'filterable' => false],
             ['title' => '', 'data' => 'actionsView'],

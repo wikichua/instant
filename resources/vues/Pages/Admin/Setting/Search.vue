@@ -1,9 +1,8 @@
 <template>
     <form @submit.prevent="onSearch" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
-            <!-- <instant-input-field label="Group" :form="form.filters" objprop="group" id="group"/> -->
-            <instant-select-field label="Group" :form="form.filters" objprop="group" id="group" :options="$page.props.groups" tags/>
-            <instant-input-field label="Permissions" :form="form.filters" objprop="name" id="name"/>
+            <instant-date-range-field label="Created At" :form="form.filters" objprop="created_at" id="created_at"/>
+            <instant-input-field label="Key" :form="form.filters" objprop="key" id="key"/>
             <instant-button-field>filter</instant-button-field>
         </div>
     </form>
@@ -15,8 +14,8 @@
             return {
                 form: this.$inertia.form({
                     filters: {
-                        group: [''],
-                        name: '',
+                        key: '',
+                        created_at: '',
                     },
                 })
             }
@@ -24,9 +23,6 @@
         methods: {
             onSearch() {
                 this.form.post(this.route('setting'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
                     forceFormData: true,
                     onFinish: () => this.emitter.emit('toggleModal'),
                 });

@@ -34,7 +34,6 @@ class SettingController extends Controller
             'update' => auth()->user()->can('update-settings'),
             'delete' => auth()->user()->can('delete-settings'),
         ];
-
         $models = app(config('instant.Models.Setting'))->query()
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
@@ -51,9 +50,9 @@ class SettingController extends Controller
         }
 
         $columns = [
-            ['title' => 'Key', 'data' => 'key', 'sortable' => true],
-            ['title' => 'Value', 'data' => 'valueString', 'sortable' => true],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Key', 'data' => 'key', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Value', 'data' => 'valueString', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
 
         return inertia('Admin/Setting/Index', compact('columns', 'models', 'can'));

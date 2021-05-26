@@ -1,9 +1,9 @@
 <template>
     <form @submit.prevent="onSearch" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
-            <!-- <instant-input-field label="Group" :form="form.filters" objprop="group" id="group"/> -->
-            <instant-select-field label="Group" :form="form.filters" objprop="group" id="group" :options="$page.props.groups" tags/>
-            <instant-input-field label="Permissions" :form="form.filters" objprop="name" id="name"/>
+            <instant-input-field label="Name" :form="form.filters" objprop="name" id="name"/>
+            <instant-date-range-field label="Report Generated" :form="form.filters" objprop="generated_at" id="generated_at"/>
+            <instant-select-field label="Status" :form="form.filters" objprop="status" id="status" :options="$page.props.status"/>
             <instant-button-field>filter</instant-button-field>
         </div>
     </form>
@@ -15,7 +15,8 @@
             return {
                 form: this.$inertia.form({
                     filters: {
-                        group: [''],
+                        generated_at: '',
+                        status: 'A',
                         name: '',
                     },
                 })

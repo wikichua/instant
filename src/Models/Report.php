@@ -47,7 +47,7 @@ class Report extends Model
 
     public function scopeFilterStatus($query, $search)
     {
-        return $query->whereIn('status', $search);
+        return $query->where('status', $search);
     }
 
     public function getGeneratedAtAttribute($value)

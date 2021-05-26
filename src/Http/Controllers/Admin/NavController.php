@@ -56,8 +56,8 @@ class NavController extends Controller
             ['title' => 'Group Slug', 'data' => 'group_slug', 'sortable' => true],
             ['title' => 'Locale', 'data' => 'locale', 'sortable' => true],
             ['title' => 'Ordering', 'data' => 'seq', 'sortable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false],
+            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

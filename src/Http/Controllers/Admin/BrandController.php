@@ -45,11 +45,11 @@ class BrandController extends Controller
         }
         $getUrl = route('brand');
         $html = [
-            ['title' => 'Brand Name', 'data' => 'name', 'sortable' => true, 'filterable' => true],
-            ['title' => 'Domain', 'data' => 'domain', 'sortable' => true, 'filterable' => true],
-            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Brand Name', 'data' => 'name', 'sortable' => true],
+            ['title' => 'Domain', 'data' => 'domain', 'sortable' => true],
+            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false],
+            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

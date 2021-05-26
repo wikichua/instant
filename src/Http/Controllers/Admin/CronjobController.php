@@ -49,13 +49,13 @@ class CronjobController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
-            ['title' => 'Timezone', 'data' => 'timezone', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Frequency', 'data' => 'frequency', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Last Run Date', 'data' => 'last_run_date', 'sortable' => false, 'filterable' => true],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Name', 'data' => 'name', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Timezone', 'data' => 'timezone', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Frequency', 'data' => 'frequency', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Status', 'data' => 'status_name', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => 'Last Run Date', 'data' => 'last_run_date', 'sortable' => false, 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
 
         return inertia('Admin/Cronjob/Index', compact('columns', 'models', 'can'));

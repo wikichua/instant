@@ -53,9 +53,9 @@ class PermissionController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Group', 'data' => 'group', 'sortable' => true],
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Group', 'data' => 'group', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Name', 'data' => 'name', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
         $groups = app(config('instant.Models.Permission'))->query()->select([\DB::raw('`group` as label'),\DB::raw('`group` as value')])->groupBy('label')->get()->toArray();
         return inertia('Admin/Permission/Index', compact('columns', 'models', 'groups', 'can'));

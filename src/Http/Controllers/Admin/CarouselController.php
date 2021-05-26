@@ -50,11 +50,11 @@ class CarouselController extends Controller
         $getUrl = route('carousel');
         $html = [
             ['title' => 'Brand', 'data' => 'brand.name', 'sortable' => false],
-            ['title' => 'Slug', 'data' => 'slug', 'sortable' => true, 'filterable' => true],
+            ['title' => 'Slug', 'data' => 'slug', 'sortable' => true],
             ['title' => 'Image', 'data' => 'image', 'sortable' => false, 'filterable' => false],
-            ['title' => 'Tags', 'data' => 'tags', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false, 'filterable' => true],
-            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false, 'filterable' => true],
+            ['title' => 'Tags', 'data' => 'tags', 'sortable' => false],
+            ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false],
+            ['title' => 'Expired Date', 'data' => 'expired_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
 

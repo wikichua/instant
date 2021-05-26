@@ -49,10 +49,10 @@ class RoleController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Name', 'data' => 'name', 'sortable' => true],
-            ['title' => 'Is Admin', 'data' => 'isAdmin'],
-            ['title' => 'Permissions', 'data' => 'permissions'],
-            ['title' => '', 'data' => 'actionsView'],
+            ['title' => 'Name', 'data' => 'name', 'sortable' => true, 'class' => 'text-left'],
+            ['title' => 'Is Admin', 'data' => 'isAdmin', 'class' => 'text-left'],
+            ['title' => 'Permissions', 'data' => 'permissions', 'class' => 'text-left'],
+            ['title' => '', 'data' => 'actionsView', 'class' => 'text-center'],
         ];
         return inertia('Admin/Role/Index', compact('models', 'columns', 'can'));
     }
@@ -63,8 +63,8 @@ class RoleController extends Controller
             $trail->parent('home');
             $trail->push('Create Role');
         });
-        $group_permissions = $this->getGroupPermissions();
-        return inertia('Admin/Role/Create', compact('group_permissions'));
+        $this->shareData();
+        return inertia('Admin/Role/Create');
     }
 
     public function store(Request $request)
@@ -105,9 +105,8 @@ class RoleController extends Controller
             $trail->push('Show Role');
         });
         $model = app(config('instant.Models.Role'))->query()->with(['creator','modifier'])->findOrFail($id);
-        $selected_permissions = $this->getSelectedPermissions($model);
-        $group_permissions = $this->getGroupPermissions();
-        return inertia('Admin/Role/Show', compact('model', 'selected_permissions', 'group_permissions'));
+        $this->shareData($model);
+        return inertia('Admin/Role/Show', compact('model'));
     }
 
     public function edit(Request $request, $id)
@@ -117,9 +116,8 @@ class RoleController extends Controller
             $trail->push('Edit Role');
         });
         $model = app(config('instant.Models.Role'))->query()->with(['creator','modifier'])->findOrFail($id);
-        $selected_permissions = $this->getSelectedPermissions($model);
-        $group_permissions = $this->getGroupPermissions();
-        return inertia('Admin/Role/Edit', compact('model', 'group_permissions', 'selected_permissions'));
+        $this->shareData($model);
+        return inertia('Admin/Role/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -193,5 +191,12 @@ class RoleController extends Controller
     private function getSelectedPermissions($model)
     {
         return $model->permissions()->select(['permissions.id', \DB::Raw('\'true\' as `selected`')])->pluck('selected', 'id')->toArray();
+    }
+
+    protected function shareData($model = null)
+    {
+        $selected_permissions = $model ? $this->getSelectedPermissions($model) : [];
+        $group_permissions = $this->getGroupPermissions();
+        return inertia()->share(compact('selected_permissions', 'group_permissions'));
     }
 }
