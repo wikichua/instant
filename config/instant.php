@@ -33,6 +33,7 @@ return [
             'VerifyEmail' => \Wikichua\Instant\Http\Controllers\Auth\VerifyEmailController::class,
             'Reauth' => \Wikichua\Instant\Http\Controllers\Auth\ReauthController::class,
         ],
+        'Cache' => \Wikichua\Instant\Http\Controllers\Admin\CacheController::class,
         'Profile' => \Wikichua\Instant\Http\Controllers\Admin\ProfileController::class,
         'Dashboard' => \Wikichua\Instant\Http\Controllers\Admin\DashboardController::class,
         'User' => \Wikichua\Instant\Http\Controllers\Admin\UserController::class,

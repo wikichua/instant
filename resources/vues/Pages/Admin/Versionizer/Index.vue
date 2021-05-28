@@ -1,7 +1,7 @@
 <template>
     <authenticated-layout>
         <template #page-title>
-            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('audit')">
+            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('versionizer')">
                 {{ $page.props.moduleName }}
             </inertia-link>
         </template>
@@ -24,8 +24,8 @@
 
 <script>
     import AuthenticatedLayout from '@/Layouts/Authenticated'
-    import InstantActions from '@/Pages/Admin/Audit/Actions'
-    import InstantSearch from '@/Pages/Admin/Audit/Search'
+    import InstantActions from '@/Pages/Admin/Versionizer/Actions'
+    import InstantSearch from '@/Pages/Admin/Versionizer/Search'
     import { reactive } from 'vue'
 
     export default {

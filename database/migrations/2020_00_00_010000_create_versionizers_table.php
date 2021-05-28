@@ -12,7 +12,7 @@ class CreateVersionizersTable extends Migration
         Schema::create('versionizers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mode');
-            $table->string('model');
+            $table->string('model_class');
             $table->integer('model_id');
             $table->json('data');
             $table->json('changes');
@@ -21,10 +21,10 @@ class CreateVersionizersTable extends Migration
             $table->integer('reverted_by')->nullable();
             $table->timestamps();
 
-            $table->index(['model']);
+            $table->index(['model_class']);
             $table->index(['brand_id']);
-            $table->index(['model', 'model_id']);
-            $table->index(['model', 'model_id', 'brand_id']);
+            $table->index(['model_class', 'model_id']);
+            $table->index(['model_class', 'model_id', 'brand_id']);
         });
     }
 

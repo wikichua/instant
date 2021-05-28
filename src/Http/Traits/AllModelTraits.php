@@ -60,7 +60,7 @@ trait AllModelTraits
                 $data = $this->getOriginal();
                 app(config('instant.Models.Versionizer'))->create([
                     'mode' => $mode,
-                    'model' => get_class($this),
+                    'model_class' => get_class($this),
                     'model_id' => $this->id,
                     'data' => $data,
                     'changes' => $changes,

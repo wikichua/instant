@@ -64,7 +64,7 @@ abstract class User extends Authenticatable
 
     public function getReadUrlAttribute($value)
     {
-        return $this->readUrl = route('user.show', $this->id);
+        return $this->readUrl = isset($this->id) ? route('user.show', $this->id):'';
     }
 
     public function activitylogs()

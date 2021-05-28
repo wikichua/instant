@@ -42,6 +42,8 @@
                     { label:'Audit',href:route('audit'),active:route().current('audit') },
                     { label:'Log Viewer',href:route('logviewer'),active:route().current('logviewer') },
                     { label:'Failed Job',href:route('failedjob'),active:route().current('failedjob') },
+                    { label:'Versionizer',href:route('versionizer'),active:route().current('versionizer') },
+                    { label:'Caches',href:route('cache'),active:route().current('cache') },
                 ],
             }
         },
