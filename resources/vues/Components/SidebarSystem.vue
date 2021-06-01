@@ -36,14 +36,14 @@
             return {
                 show: false,
                 menus: [
-                    { label:'Role',href:route('role'),active:route().current('role.*') },
-                    { label:'Permission',href:route('permission'),active:route().current('permission.*') },
-                    { label:'Setting',href:route('setting'),active:route().current('setting.*') },
-                    { label:'Audit',href:route('audit'),active:route().current('audit.*') },
-                    { label:'Log Viewer',href:route('logviewer'),active:route().current('logviewer.*') },
-                    { label:'Failed Job',href:route('failedjob'),active:route().current('failedjob.*') },
-                    { label:'Versionizer',href:route('versionizer'),active:route().current('versionizer.*') },
-                    { label:'Caches',href:route('cache'),active:route().current('cache.*') },
+                    { label:'Role',href:route('role'),active:route().current('role') || route().current('role.*') },
+                    { label:'Permission',href:route('permission'),active:route().current('permission') || route().current('permission.*') },
+                    { label:'Setting',href:route('setting'),active:route().current('setting') || route().current('setting.*') },
+                    { label:'Audit',href:route('audit'),active:route().current('audit') || route().current('audit.*') },
+                    { label:'Log Viewer',href:route('logviewer'),active:route().current('logviewer') || route().current('logviewer.*') },
+                    { label:'Failed Job',href:route('failedjob'),active:route().current('failedjob') || route().current('failedjob.*') },
+                    { label:'Versionizer',href:route('versionizer'),active:route().current('versionizer') || route().current('versionizer.*') },
+                    { label:'Caches',href:route('cache'),active:route().current('cache') || route().current('cache.*') },
                 ],
             }
         },
