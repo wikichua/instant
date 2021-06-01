@@ -14,9 +14,9 @@ class LogKeyForgotten
     public function handle($event)
     {
         if ($event->key != 'LogKeys') {
-            $key = cache()->get('LogKeys');
-            unset($key[$event->key]);
-            cache()->forever('LogKeys', $key);
+            $data = cache()->get('LogKeys');
+            unset($data[md5($event->key)]);
+            cache()->forever('LogKeys', $data);
         }
     }
 }

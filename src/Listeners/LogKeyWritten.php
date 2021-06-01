@@ -14,9 +14,9 @@ class LogKeyWritten
     public function handle($event)
     {
         if ($event->key != 'LogKeys') {
-            $key = cache()->get('LogKeys');
-            $key[$event->key] = json_encode($event);
-            cache()->forever('LogKeys', $key);
+            $data = cache()->get('LogKeys');
+            $data[md5($event->key)] = json_encode($event);
+            cache()->forever('LogKeys', $data);
         }
     }
 }

@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <instant-show-link :href="route('audit.show',[model.id])" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="$page.props.can.read" />
-    </div>
+    <instant-show-link :href="route('audit.show',[model.id])" class="text-indigo-600 hover:text-indigo-900 inline-block" v-if="$page.props.can.read" />
 </template>
 
 <script>
