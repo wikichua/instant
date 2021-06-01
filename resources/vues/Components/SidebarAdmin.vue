@@ -36,10 +36,10 @@
             return {
                 show: false,
                 menus: [
-                    { label:'User',href:route('user'),active:route().current('user') },
-                    { label:'Report',href:route('report'),active:route().current('report') },
-                    { label:'Cron Job',href:route('cronjob'),active:route().current('cronjob') },
-                    { label:'Mailer',href:route('mailer'),active:route().current('mailer') },
+                    { label:'User',href:route('user'),active:route().current('user.*') },
+                    { label:'Report',href:route('report'),active:route().current('report.*') },
+                    { label:'Cron Job',href:route('cronjob'),active:route().current('cronjob.*') },
+                    { label:'Mailer',href:route('mailer'),active:route().current('mailer.*') },
                 ],
             }
         },
