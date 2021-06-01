@@ -18,15 +18,6 @@ class UserPersonalAccessTokenController extends Controller
         $this->middleware('can:delete-personal-access-token')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('user_home', function ($trail) {
-                $trail->push('User Listing', route('user'));
-            });
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->parent('user_home');
-                $trail->push('User Access Token Listing', route('pat', [request()->route()->parameter('user')]));
-            });
-        }
         inertia()->share('moduleName', 'Personal Access Token Management');
     }
 
@@ -55,12 +46,7 @@ class UserPersonalAccessTokenController extends Controller
 
     public function create(Request $request, $user_id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create User Access Token');
-        });
         $user = app(config('instant.Models.User'))->query()->find($user_id);
-
         return inertia('Admin/Pat/Create', compact('user', 'user_id'));
     }
 

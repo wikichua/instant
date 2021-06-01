@@ -14,11 +14,6 @@ class ComponentController extends Controller
         $this->middleware(['auth_admin', 'can:access-admin-panel']);
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-components')->only(['index', 'read']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Component Listing', route('component'));
-            });
-        }
     }
 
     public function index(Request $request)
@@ -59,10 +54,6 @@ class ComponentController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Component');
-        });
         $model = app(config('instant.Models.Component'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.component.show', compact('model'));

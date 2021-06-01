@@ -66,6 +66,7 @@ class InstantServiceProvider extends ServiceProvider
         $this->commands([
             Console\Commands\Install::class,
             Console\Commands\Report::class,
+            Console\Commands\Mailer::class,
         ]);
     }
 

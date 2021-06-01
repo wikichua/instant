@@ -12,11 +12,6 @@ class AuditController extends Controller
         $this->middleware(['auth_admin', 'can:access-admin-panel']);
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-audit')->only(['index', 'read']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Audit Listing', route('audit'));
-            });
-        }
         inertia()->share('moduleName', 'Audit Management');
     }
 
@@ -51,10 +46,6 @@ class AuditController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Audit');
-        });
         $model = app(config('instant.Models.Audit'))->query()->with(['user','brand','creator','modifier'])->findOrFail($id);
 
         return inertia('Admin/Audit/Show', compact('model'));

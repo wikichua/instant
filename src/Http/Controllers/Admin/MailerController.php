@@ -2,8 +2,9 @@
 
 namespace Wikichua\Instant\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class MailerController extends Controller
 {
@@ -11,42 +12,34 @@ class MailerController extends Controller
     {
         $this->middleware(['auth_admin', 'can:access-admin-panel']);
         $this->middleware('intend_url')->only(['index', 'read']);
-        $this->middleware('can:Read Mailers')->only(['index', 'read']);
-        $this->middleware('can:Update Mailers')->only(['edit', 'update']);
-        $this->middleware('can:Delete Mailers')->only('destroy');
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Mailer Listing', route('mailer'));
-            });
-        }
+        $this->middleware('can:read-mailers')->only(['index', 'read']);
+        $this->middleware('can:update-mailers')->only(['edit', 'update']);
+        $this->middleware('can:delete-mailers')->only('destroy');
+        inertia()->share('moduleName', 'Mailer Management');
     }
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $models = app(config('instant.Models.Mailer'))->query()
+        $can = [
+            'read' => auth()->user()->can('read-mailers'),
+            'update' => auth()->user()->can('update-mailers'),
+            'delete' => auth()->user()->can('delete-mailers'),
+        ];
+        $models = app(config('instant.Models.Mailer'))->query()
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
-            ;
-            $paginated = $models->paginate($request->get('take', 25));
-            foreach ($paginated as $model) {
-                $model->actionsView = view('dashing::admin.mailer.actions', compact('model'))->render();
-                $model->parameters = app($model->mailable)->getVariables();
-            }
-            if ('' != $request->get('filters', '')) {
-                $paginated->appends(['filters' => $request->get('filters', '')]);
-            }
-            if ('' != $request->get('sort', '')) {
-                $paginated->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
-            }
-            $links = $paginated->onEachSide(5)->links()->render();
-            $currentUrl = $request->fullUrl();
-
-            return compact('paginated', 'links', 'currentUrl');
+                ->paginate($request->get('take', 25));
+        foreach ($models as $model) {
+            $model->parameters = app($model->mailable)->getVariables();
         }
-        $getUrl = route('mailer');
-        $html = [
+        if ('' != $request->get('filters', '')) {
+            $models->appends(['filters' => $request->get('filters', '')]);
+        }
+        if ('' != $request->get('sort', '')) {
+            $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
+        }
+        $columns = [
             ['title' => 'Mailable', 'data' => 'mailable', 'sortable' => false],
             ['title' => 'Subject', 'data' => 'subject', 'sortable' => false],
             ['title' => 'Available Params', 'data' => 'parameters', 'sortable' => false],
@@ -54,30 +47,22 @@ class MailerController extends Controller
             ['title' => '', 'data' => 'actionsView'],
         ];
 
-        return view('dashing::admin.mailer.index', compact('html', 'getUrl'));
+        return inertia('Admin/Mailer/Index', compact('columns', 'models', 'can'));
     }
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Mailer');
-        });
         $model = app(config('instant.Models.Mailer'))->query()->with(['creator','modifier'])->findOrFail($id);
         $preview = app($model->mailable);
 
-        return view('dashing::admin.mailer.show', compact('model'));
+        return inertia('Admin/Mailer/Show', compact('model'));
     }
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Mailer');
-        });
         $model = app(config('instant.Models.Mailer'))->query()->with(['creator','modifier'])->findOrFail($id);
 
-        return view('dashing::admin.mailer.edit', compact('model'));
+        return inertia('Admin/Mailer/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -100,16 +85,13 @@ class MailerController extends Controller
             'link' => $model->readUrl,
             'message' => 'Mailer Updated. ('.$model->name.')',
             'sender_id' => auth()->id(),
-            'receiver_id' => permissionUserIds('Read Mailers'),
+            'receiver_id' => permissionUserIds('read-mailers'),
             'icon' => $model->menu_icon,
         ]);
 
-        return response()->json([
+        return Redirect::route('mailer.edit', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Mailer Updated.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('mailer.edit', [$model->id]),
         ]);
     }
 
@@ -121,32 +103,25 @@ class MailerController extends Controller
             'link' => null,
             'message' => 'Mailer Deleted. ('.$model->name.')',
             'sender_id' => auth()->id(),
-            'receiver_id' => permissionUserIds('Read Mailers'),
+            'receiver_id' => permissionUserIds('read-mailers'),
             'icon' => $model->menu_icon,
         ]);
         $model->delete();
 
-        return response()->json([
+        return Redirect::route('mailer')->with([
             'status' => 'success',
             'flash' => 'Mailer Deleted.',
-            'reload' => false,
-            'relist' => true,
-            'redirect' => false,
         ]);
     }
 
     public function preview(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Preview Mailer');
-        });
         $model = app(config('instant.Models.Mailer'))->query()->with(['creator','modifier'])->findOrFail($id);
         $params = app($model->mailable)->getVariables();
         if ($request->isMethod('post')) {
             return app($model->mailable)->preview();
         }
 
-        return view('dashing::admin.mailer.preview', compact('model', 'params'));
+        return inertia('Admin/Mailer/Preview', compact('model', 'params'));
     }
 }

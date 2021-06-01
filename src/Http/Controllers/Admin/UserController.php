@@ -19,11 +19,6 @@ class UserController extends Controller
         $this->middleware('can:delete-users')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy', 'editPassword']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('User Listing', route('user'));
-            });
-        }
         inertia()->share('moduleName', 'User Management');
     }
 
@@ -72,10 +67,6 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create User');
-        });
         $this->shareData();
         return inertia('Admin/User/Create');
     }
@@ -117,10 +108,6 @@ class UserController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show User');
-        });
         $model = app(config('instant.Models.User'))->query()->with(['creator','modifier'])->findOrFail($id);
         $last_activity = $model->activitylogs()->first();
         $model->last_activity = [
@@ -134,10 +121,6 @@ class UserController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit User');
-        });
         $model = app(config('instant.Models.User'))->query()->with(['creator','modifier'])->findOrFail($id);
         $this->shareData($model);
         return inertia('Admin/User/Edit', compact('model'));
@@ -182,11 +165,6 @@ class UserController extends Controller
     public function editPassword(Request $request, $id)
     {
         $model = app(config('instant.Models.User'))->query()->with(['creator','modifier'])->findOrFail($id);
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit User Password');
-        });
-
         return inertia('Admin/User/EditPassword', compact('model'));
     }
 

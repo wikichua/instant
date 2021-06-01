@@ -9,11 +9,6 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Dashboard', route('dashboard'));
-            });
-        }
     }
     public function index(Request $request)
     {
@@ -42,10 +37,6 @@ class DashboardController extends Controller
 
     public function wiki(Request $request, $file = 'Index.md')
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Dashing Documentation');
-        });
         $md = \File::get(base_path('vendor/wikichua/dashing/wiki/'.$file));
         $search = [
             '(Installation.md)',

@@ -13,11 +13,6 @@ class BrandController extends Controller
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-brands')->only(['index', 'read']);
         $this->middleware('can:update-brands')->only(['edit', 'update']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Brand Listing', route('brand'));
-            });
-        }
     }
 
     public function index(Request $request)
@@ -58,10 +53,6 @@ class BrandController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Brand');
-        });
         $model = app(config('instant.Models.Brand'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.brand.show', compact('model'));
@@ -69,10 +60,6 @@ class BrandController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Brand');
-        });
         $model = app(config('instant.Models.Brand'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.brand.edit', compact('model'));

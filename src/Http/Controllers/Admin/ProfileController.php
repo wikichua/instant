@@ -22,18 +22,12 @@ class ProfileController extends Controller
             'message' => $last_activity->message,
             'iplocation' => $last_activity->iplocation,
         ];
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->push('My Profile', route('profile'));
-        });
         return view('dashing::admin.profile.show', compact('model'));
     }
 
     public function edit(Request $request)
     {
         $model = auth()->user();
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->push('Edit My Profile / Change Password', route('profile.edit'));
-        });
         return view('dashing::admin.profile.edit', compact('model'));
     }
 

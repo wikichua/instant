@@ -18,11 +18,6 @@ class RoleController extends Controller
         $this->middleware('can:delete-roles')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Role Listing', route('role'));
-            });
-        }
         inertia()->share('moduleName', 'Role Management');
     }
 
@@ -59,10 +54,6 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Role');
-        });
         $this->shareData();
         return inertia('Admin/Role/Create');
     }
@@ -100,10 +91,6 @@ class RoleController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Role');
-        });
         $model = app(config('instant.Models.Role'))->query()->with(['creator','modifier'])->findOrFail($id);
         $this->shareData($model);
         return inertia('Admin/Role/Show', compact('model'));
@@ -111,10 +98,6 @@ class RoleController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Role');
-        });
         $model = app(config('instant.Models.Role'))->query()->with(['creator','modifier'])->findOrFail($id);
         $this->shareData($model);
         return inertia('Admin/Role/Edit', compact('model'));

@@ -18,11 +18,6 @@ class PusherController extends Controller
         $this->middleware('can:pusher-pushers')->only('push');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Pusher Listing', route('pusher'));
-            });
-        }
     }
 
     public function index(Request $request)
@@ -66,11 +61,6 @@ class PusherController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Pusher');
-        });
-
         return view('dashing::admin.pusher.create');
     }
 
@@ -114,10 +104,6 @@ class PusherController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Pusher');
-        });
         $model = app(config('instant.Models.Pusher'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.pusher.show', compact('model'));
@@ -125,10 +111,6 @@ class PusherController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Pusher');
-        });
         $model = app(config('instant.Models.Pusher'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.pusher.edit', compact('model'));

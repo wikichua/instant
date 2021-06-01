@@ -19,11 +19,6 @@ class PageController extends Controller
         $this->middleware('can:Migrate Pages')->only('migration');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Page Listing', route('page'));
-            });
-        }
     }
 
     public function index(Request $request)
@@ -69,11 +64,6 @@ class PageController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Page');
-        });
-
         return view('dashing::admin.page.create');
     }
 
@@ -117,10 +107,6 @@ class PageController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Page');
-        });
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.page.show', compact('model'));
@@ -146,10 +132,6 @@ class PageController extends Controller
 
     public function preview($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('preview-page');
-        });
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
         if (0 != $model->brand_id) {
             $brandName = strtolower($model->brand->name);
@@ -174,10 +156,6 @@ class PageController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Page');
-        });
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.page.edit', compact('model'));
@@ -251,10 +229,6 @@ class PageController extends Controller
 
     public function migration(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Migration Script');
-        });
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
         $brandString = $model->brand->name;
         unset($model->id);

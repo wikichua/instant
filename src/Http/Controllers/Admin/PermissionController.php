@@ -18,11 +18,6 @@ class PermissionController extends Controller
         $this->middleware('can:delete-permissions')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Permission Listing', route('permission'));
-            });
-        }
         inertia()->share('moduleName', 'Permission Management');
     }
 
@@ -63,11 +58,6 @@ class PermissionController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Permission');
-        });
-
         return inertia('Admin/Permission/Create');
     }
 
@@ -112,10 +102,6 @@ class PermissionController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Permission');
-        });
         $model = app(config('instant.Models.Permission'))->query()->with(['creator','modifier'])->findOrFail($id);
         $permissions = app(config('instant.Models.Permission'))->query()->where('group', $model->group)->pluck('name', 'id');
         return inertia('Admin/Permission/Show', compact('model', 'permissions'));
@@ -123,10 +109,6 @@ class PermissionController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Permission');
-        });
         $model = app(config('instant.Models.Permission'))->query()->with(['creator','modifier'])->findOrFail($id);
         $permissions = app(config('instant.Models.Permission'))->query()->where('group', $model->group)->pluck('name')->toArray();
         return inertia('Admin/Permission/Edit', compact('model', 'permissions'));

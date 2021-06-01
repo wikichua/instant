@@ -17,11 +17,6 @@ class FailedJobController extends Controller
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-failed-jobs')->only(['index', 'read']);
         $this->middleware('can:retry-failed-jobs')->only(['retry']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Failed Jobs Listing', route('failedjob'));
-            });
-        }
         inertia()->share('moduleName', 'Failed Job Management');
     }
 
@@ -66,10 +61,6 @@ class FailedJobController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Failed Job');
-        });
         $model = app(config('instant.Models.FailedJob'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return inertia('Admin/Failedjob/Show', compact('model'));

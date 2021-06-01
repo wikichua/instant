@@ -34,11 +34,6 @@ class FileController extends Controller
         } else {
             $this->storagePath = storage_path('app/public');
         }
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Files Listing', route('file'));
-            });
-        }
     }
 
     public function index(Request $request, $path = '')

@@ -15,11 +15,6 @@ class CacheController extends Controller
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-caches')->only(['index', 'read']);
         $this->middleware('can:delete-caches')->only('destroy');
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Caches Listing', route('cache'));
-            });
-        }
         inertia()->share(['moduleName' => 'Cache Management']);
     }
 
@@ -71,10 +66,6 @@ class CacheController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Cache');
-        });
         $model = json_decode(cache()->get('LogKeys')[$id]);
         if (count($model->tags)) {
             $model->value = cache()->tags($model->tags)->get($model->key);

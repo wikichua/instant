@@ -38,7 +38,6 @@
         "spatie/laravel-database-mail-templates": "^3.4",
         "ably/ably-php": "dev-main",
         "psr/cache": "^1.0",
-        "diglactic/laravel-breadcrumbs": "^6.1",
         "amnuts/opcache-gui": "^3.2",
         "laravel/ui": "^3.2"
     },

@@ -18,11 +18,6 @@ class CronjobController extends Controller
         $this->middleware('can:delete-cronjobs')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Cron Jobs Listing', route('cronjob'));
-            });
-        }
         inertia()->share('moduleName', 'Cronjob Management');
     }
 
@@ -63,10 +58,6 @@ class CronjobController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Cron Job');
-        });
         $this->shareData();
         return inertia('Admin/Cronjob/Create');
     }
@@ -93,10 +84,6 @@ class CronjobController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Cron Job');
-        });
         $model = app(config('instant.Models.Cronjob'))->query()->with(['creator','modifier'])->findOrFail($id);
         $this->shareData();
         return inertia('Admin/Cronjob/Show', compact('model'));
@@ -104,10 +91,6 @@ class CronjobController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Cron Job');
-        });
         $model = app(config('instant.Models.Cronjob'))->query()->with(['creator','modifier'])->findOrFail($id);
         $this->shareData();
         return inertia('Admin/Cronjob/Edit', compact('model'));

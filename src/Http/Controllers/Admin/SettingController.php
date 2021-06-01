@@ -18,11 +18,6 @@ class SettingController extends Controller
         $this->middleware('can:delete-settings')->only('destroy');
 
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Setting Listing', route('setting'));
-            });
-        }
         inertia()->share('moduleName', 'Setting Management');
     }
 
@@ -60,11 +55,6 @@ class SettingController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Setting');
-        });
-
         return inertia('Admin/Setting/Create');
     }
 
@@ -107,10 +97,6 @@ class SettingController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Setting');
-        });
         $model = app(config('instant.Models.Setting'))->query()->with(['creator','modifier'])->findOrFail($id);
         $value = $model->value;
         $values = ['key'=>'','value'=>''];
@@ -128,10 +114,6 @@ class SettingController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Setting');
-        });
         $model = app(config('instant.Models.Setting'))->query()->with(['creator','modifier'])->findOrFail($id);
         $value = $model->value;
         $values = ['key'=>'','value'=>''];

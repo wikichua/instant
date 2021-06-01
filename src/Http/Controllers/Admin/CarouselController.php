@@ -14,12 +14,6 @@ class CarouselController extends Controller
         $this->middleware('can:create-carousels')->only(['create', 'store']);
         $this->middleware('can:read-carousels')->only(['index', 'read']);
         $this->middleware('can:update-carousels')->only(['edit', 'update']);
-        $this->middleware('can:delete-carousels')->only('destroy');
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Carousel Listing', route('carousel'));
-            });
-        }
     }
 
     public function index(Request $request)
@@ -63,11 +57,6 @@ class CarouselController extends Controller
 
     public function create(Request $request)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Create Carousel');
-        });
-
         return view('dashing::admin.carousel.create');
     }
 
@@ -118,10 +107,6 @@ class CarouselController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Carousel');
-        });
         $model = app(config('instant.Models.Carousel'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.carousel.show', compact('model'));
@@ -129,10 +114,6 @@ class CarouselController extends Controller
 
     public function edit(Request $request, $id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Edit Carousel');
-        });
         $model = app(config('instant.Models.Carousel'))->query()->with(['creator','modifier'])->findOrFail($id);
 
         return view('dashing::admin.carousel.edit', compact('model'));
@@ -221,10 +202,6 @@ class CarouselController extends Controller
 
             return compact('paginated');
         }
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Ordering Carousel Position');
-        });
         $getUrl = route('carousel.orderable', [$orderable, $brand_id]);
         $actUrl = route('carousel.orderableUpdate', [$orderable, $brand_id]);
         $html = [

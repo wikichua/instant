@@ -90,3 +90,4 @@ Password : admin123
 
 https://vcalendar.io/datepicker.html
 https://github.com/vueform/multiselect
+https://github.com/davidroyer/vue2-editor

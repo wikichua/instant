@@ -417,7 +417,7 @@ class Help
 
     public function permissionUserIds($permission, $brand_id = 0)
     {
-        $permission = app(config('instant.Models.Permission'))->where('name', $permission)->first();
+        $permission = app(config('instant.Models.Permission'))->where('name', str_slug($permission))->first();
 
         return cache()->tags(['permissions'])->rememberForever('permission_users:'.$permission->id.':'.$brand_id, function () use ($permission, $brand_id) {
             $ids = [];

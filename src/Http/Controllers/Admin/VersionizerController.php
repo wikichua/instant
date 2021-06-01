@@ -15,11 +15,6 @@ class VersionizerController extends Controller
         $this->middleware('can:read-versionizers')->only(['index', 'read']);
         $this->middleware('can:revert-versionizers')->only(['revert']);
         $this->middleware('can:delete-versionizers')->only('destroy');
-        if (false == app()->runningInConsole()) {
-            \Breadcrumbs::for('home', function ($trail) {
-                $trail->push('Versionizers Listing', route('versionizer'));
-            });
-        }
         inertia()->share('moduleName', 'Versionizer Management');
     }
 
@@ -56,12 +51,7 @@ class VersionizerController extends Controller
 
     public function show($id)
     {
-        \Breadcrumbs::for('breadcrumb', function ($trail) {
-            $trail->parent('home');
-            $trail->push('Show Versionizer');
-        });
         $model = app(config('instant.Models.Versionizer'))->query()->with(['creator','modifier','brand'])->findOrFail($id);
-
         return inertia('Admin/Versionizer/Show', compact('model'));
     }
 
