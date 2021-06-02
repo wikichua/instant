@@ -10,12 +10,12 @@
                 Edit
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-select-field :form="form" objprop="brand_id" id="brand_id" label="Brand" :options="$page.props.brands" disabled/>
-                <instant-input-field :form="form" type="text" objprop="name" id="name" label="Full Name" disabled/>
-                <instant-input-field :form="form" type="email" objprop="email" id="email" label="Email" disabled/>
-                <instant-select-field :form="form" objprop="timezone" id="timezone" label="Timezone" :options="$page.props.timezones" disabled/>
-                <instant-select-field :form="form" objprop="type" id="type" label="Type" :options="$page.props.user_types" disabled/>
-                <instant-checkbox-group-field :form="form" objprop="roles" id="roles" label="Roles" :options="$page.props.roles" disabled/>
+                <instant-display-field :data="model.brand_id" id="brand_id" label="Brand" :options="$page.props.brands"/>
+                <instant-display-field :data="model.name" id="name" label="Full Name"/>
+                <instant-display-field :data="model.email" id="email" label="Email"/>
+                <instant-display-field :data="model.timezone" id="timezone" label="Timezone" :options="$page.props.timezones"/>
+                <instant-display-field :data="model.type" id="type" label="Type" :options="$page.props.user_types"/>
+                <instant-display-field :data="$page.props.user_roles_list" id="roles" label="Roles" type="list"/>
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model">
@@ -36,14 +36,6 @@
 
         data() {
             return {
-                form: this.$inertia.form({
-                    brand_id: this.model.brand_id,
-                    name: this.model.name,
-                    email: this.model.email,
-                    timezone: this.model.timezone,
-                    type: this.model.type,
-                    roles: this.$page.props.user_roles,
-                })
             }
         },
 

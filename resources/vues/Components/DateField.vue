@@ -30,10 +30,12 @@
             form: Object,
             objprop: String,
             disabled: {
+                type: Boolean,
                 default: false,
             },
         },
         data () {
+            console.log(this.disabled);
             return {
                 date: new Date(),
             }

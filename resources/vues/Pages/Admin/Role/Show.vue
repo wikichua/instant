@@ -10,9 +10,9 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-input-field label="Name" :form="form" objprop="name" id="name" disabled/>
-                <instant-select-field label="Admin" :form="form" objprop="admin" id="admin" :options="{ 0: 'No', 1: 'Yes'}" disabled/>
-                <instant-checkbox-group-field label="Permissions" :form="form" objprop="permissions" id="permissions" :options="$page.props.group_permissions" :selected="$page.props.selected_permissions" grouped disabled/>
+                <instant-display-field label="Name" :data="model.name" id="name"/>
+                <instant-display-field label="Admin" :data="model.admin" id="admin" :options="[{ value: 0, label:'No'},{ value: 1 , label:'Yes' }]"/>
+                <instant-display-field label="Permissions" :data="$page.props.selected_permissions_list" type="list" id="permissions"/>
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />
@@ -29,11 +29,6 @@
 
         data() {
             return {
-                form: this.$inertia.form({
-                    name: this.model.name,
-                    admin: this.model.admin,
-                    permissions: this.selected_permissions,
-                })
             }
         },
 
@@ -41,7 +36,6 @@
             auth: Object,
             errors: Object,
             model: Object,
-            selected_permissions: Object,
         },
 
         methods: {

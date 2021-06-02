@@ -10,11 +10,11 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-input-field label="Name" :form="form" objprop="name" id="name" disabled/>
-                <instant-input-field label="Command" :form="form" objprop="command" id="command" disabled/>
-                <instant-select-field label="Timezone" :form="form" objprop="timezone" id="timezone" :options="$page.props.timezones" disabled/>
-                <instant-select-field label="Frequency" :form="form" objprop="frequency" id="frequency" :options="$page.props.cronjob_frequencies" disabled/>
-                <instant-select-field label="Status" :form="form" objprop="status" id="status" :options="$page.props.report_status" disabled/>
+                <instant-display-field label="Name" :html="model.name" id="name" />
+                <instant-display-field label="Command" :html="model.command" id="command" />
+                <instant-display-field label="Timezone" :html="model.timezone" id="timezone" :options="$page.props.timezones" />
+                <instant-display-field label="Frequency" :html="model.frequency" id="frequency" :options="$page.props.cronjob_frequencies" />
+                <instant-display-field label="Status" :html="model.status" id="status" :options="$page.props.cronjob_status" />
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />
@@ -33,13 +33,6 @@
 
         data() {
             return {
-                form: this.$inertia.form({
-                    name: this.model.name,
-                    command: this.model.command,
-                    timezone: this.model.timezone,
-                    frequency: this.model.frequency,
-                    status: this.model.status,
-                })
             }
         },
 
@@ -47,8 +40,6 @@
             auth: Object,
             errors: Object,
             model: Object,
-            value: String,
-            values: Object,
         },
 
         methods: {

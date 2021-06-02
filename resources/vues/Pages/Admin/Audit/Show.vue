@@ -10,14 +10,14 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-display-field :form="form" type="text" :html="model.brand.name" id="brand" label="Brand"/>
-                <instant-display-field :form="form" type="text" :html="model.user.name" id="user" label="User"/>
-                <instant-display-field :form="form" type="text" :html="model.model_id" id="model_id" label="Model ID"/>
-                <instant-display-field :form="form" type="text" :html="model.model_class" id="model_class" label="Model Class"/>
-                <instant-display-field :form="form" type="text" :html="model.message" id="message" label="Message"/>
-                <instant-display-field :form="form" type="json" :html="model.data" id="data" label="Data"/>
-                <instant-display-field :form="form" type="json" :html="model.agents" id="agents" label="Agents"/>
-                <instant-display-field :form="form" type="json" :html="model.iplocation" id="iplocation" label="Iplocation"/>
+                <instant-display-field type="text" :html="model.brand.name" id="brand" label="Brand"/>
+                <instant-display-field type="text" :html="model.user.name" id="user" label="User"/>
+                <instant-display-field type="text" :html="model.model_id" id="model_id" label="Model ID"/>
+                <instant-display-field type="text" :html="model.model_class" id="model_class" label="Model Class"/>
+                <instant-display-field type="text" :html="model.message" id="message" label="Message"/>
+                <instant-display-field type="json" :html="model.data" id="data" label="Data"/>
+                <instant-display-field type="json" :html="model.agents" id="agents" label="Agents"/>
+                <instant-display-field type="json" :html="model.iplocation" id="iplocation" label="Iplocation"/>
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />

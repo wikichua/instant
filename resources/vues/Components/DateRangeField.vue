@@ -34,6 +34,7 @@
             form: Object,
             objprop: String,
             disabled: {
+                type: Boolean,
                 default: false,
             },
         },

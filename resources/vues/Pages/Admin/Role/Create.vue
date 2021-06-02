@@ -12,7 +12,7 @@
             <form @submit.prevent="submit">
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <instant-input-field label="Name" :form="form" objprop="name" id="name"/>
-                    <instant-select-field label="Admin" :form="form" objprop="admin" id="admin" :options="{ 0: 'No', 1: 'Yes'}"/>
+                    <instant-select-field label="Admin" :form="form" objprop="admin" id="admin" :options="[{ value: 0, label:'No'},{ value: 1 , label:'Yes' }]"/>
                     <instant-checkbox-group-field label="Permissions" :form="form" objprop="permissions" id="permissions" :options="$page.props.group_permissions" grouped/>
                     <instant-button-field>Save</instant-button-field>
                 </div>

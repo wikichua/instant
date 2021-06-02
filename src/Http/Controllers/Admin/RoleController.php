@@ -179,7 +179,8 @@ class RoleController extends Controller
     protected function shareData($model = null)
     {
         $selected_permissions = $model ? $this->getSelectedPermissions($model) : [];
+        $selected_permissions_list = $model ? $model->permissions()->pluck('name')->toArray() : [];
         $group_permissions = $this->getGroupPermissions();
-        return inertia()->share(compact('selected_permissions', 'group_permissions'));
+        return inertia()->share(compact('selected_permissions', 'group_permissions', 'selected_permissions_list'));
     }
 }

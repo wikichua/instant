@@ -212,8 +212,10 @@ class UserController extends Controller
     private function shareData($model = null)
     {
         $user_roles = null;
+        $user_roles_list = [];
         if ($model) {
             $user_roles = $model->roles()->select(['roles.id', \DB::Raw('\'true\' as `selected`')])->pluck('selected', 'id')->toArray();
+            $user_roles_list = $model->roles()->pluck('name')->toArray();
         }
         $roles = app(config('instant.Models.Role'))->select(['name as label','id as value'])->orderBy('label')->get()->toArray();
         $brands = [['label' => 'System', 'value' => 0]] + app(config('instant.Models.Brand'))->select(['name as label','id as value'])->get()->toArray();
@@ -223,6 +225,6 @@ class UserController extends Controller
         foreach (settings('report_status') as $value => $label) {
             $status[] = compact('value', 'label');
         }
-        return inertia()->share(compact('roles', 'brands', 'timezones', 'user_types', 'user_roles', 'status'));
+        return inertia()->share(compact('roles', 'brands', 'timezones', 'user_types', 'user_roles', 'status', 'user_roles_list'));
     }
 }

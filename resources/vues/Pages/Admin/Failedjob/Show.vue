@@ -10,10 +10,10 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-display-field :form="form" type="text" :html="model.id" id="id" label="ID"/>
-                <instant-display-field :form="form" type="text" :html="model.queue" id="queue" label="Queue"/>
-                <instant-display-field :form="form" type="json" :html="model.payload" id="payload" label="Payload"/>
-                <instant-display-field :form="form" type="json" :html="model.exception" id="exception" label="Exception"/>
+                <instant-display-field type="text" :html="model.id" id="id" label="ID"/>
+                <instant-display-field type="text" :html="model.queue" id="queue" label="Queue"/>
+                <instant-display-field type="json" :html="model.payload" id="payload" label="Payload"/>
+                <instant-display-field type="json" :html="model.exception" id="exception" label="Exception"/>
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />
@@ -30,12 +30,6 @@
 
         data() {
             return {
-                form: this.$inertia.form({
-                    id: this.model.id,
-                    queue: this.model.queue,
-                    payload: this.model.payload,
-                    exception: this.model.exception,
-                })
             }
         },
 

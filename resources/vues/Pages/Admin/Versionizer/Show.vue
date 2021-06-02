@@ -10,13 +10,13 @@
                 Show
             </template>
             <div class="shadow overflow-hidden sm:rounded-md">
-                <instant-display-field :form="form" type="text" :html="model.id" id="id" label="ID"/>
-                <instant-display-field :form="form" type="text" :html="model.brand.name" id="brand" label="Brand"/>
-                <instant-display-field :form="form" type="text" :html="model.mode" id="mode" label="Mode"/>
-                <instant-display-field :form="form" type="text" :html="model.model_id" id="model_id" label="Model ID"/>
-                <instant-display-field :form="form" type="text" :html="model.model_class" id="model_class" label="Model"/>
-                <instant-display-field :form="form" type="json" :html="model.data" id="data" label="Data"/>
-                <instant-display-field :form="form" type="json" :html="model.changes" id="changes" label="Changes"/>
+                <instant-display-field type="text" :html="model.id" id="id" label="ID"/>
+                <instant-display-field type="text" :html="model.brand.name" id="brand" label="Brand"/>
+                <instant-display-field type="text" :html="model.mode" id="mode" label="Mode"/>
+                <instant-display-field type="text" :html="model.model_id" id="model_id" label="Model ID"/>
+                <instant-display-field type="text" :html="model.model_class" id="model_class" label="Model"/>
+                <instant-display-field type="json" :html="model.data" id="data" label="Data"/>
+                <instant-display-field type="json" :html="model.changes" id="changes" label="Changes"/>
             </div>
         </instant-content-card>
         <instant-other-content-card :model="model" />
@@ -42,7 +42,6 @@
             auth: Object,
             errors: Object,
             model: Object,
-            selected_permissions: Object,
         },
 
         methods: {

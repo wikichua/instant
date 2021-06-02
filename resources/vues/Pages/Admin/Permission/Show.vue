@@ -11,8 +11,8 @@
             </template>
             <form @submit.prevent="submit">
                 <div class="shadow overflow-hidden sm:rounded-md">
-                    <instant-input-field label="Group" :form="form" objprop="group" id="group" disabled/>
-                    <instant-multi-rows-input-field label="Permissions" :form="form" objprop="name" id="name" disabled/>
+                    <instant-display-field label="Group" :data="model.group" id="group"/>
+                    <instant-display-field type="list" label="Permissions" :data="$page.props.permissions" id="name"/>
                 </div>
             </form>
         </instant-content-card>
@@ -30,10 +30,6 @@
 
         data() {
             return {
-                form: this.$inertia.form({
-                    group: this.model.group,
-                    name: this.permissions,
-                })
             }
         },
 
@@ -41,7 +37,6 @@
             auth: Object,
             errors: Object,
             model: Object,
-            permissions: Object,
         },
 
         methods: {
