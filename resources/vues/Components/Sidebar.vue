@@ -55,6 +55,7 @@
         </instant-nav-link>
         <instant-sidebar-system />
         <instant-sidebar-admin />
+        <instant-sidebar-cms />
       </div>
     </div>
   </nav>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Dashing{%comp_name%}ComponentSeed extends Migration
+class Instant{%comp_name%}ComponentSeed extends Migration
 {
     public function up()
     {

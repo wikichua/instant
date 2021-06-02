@@ -13,33 +13,29 @@ class BrandController extends Controller
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-brands')->only(['index', 'read']);
         $this->middleware('can:update-brands')->only(['edit', 'update']);
+        inertia()->share('moduleName', 'Mailer Management');
     }
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $models = app(config('instant.Models.Brand'))->query()
+        $can = [
+            'read' => auth()->user()->can('read-brands'),
+            'update' => auth()->user()->can('update-brands'),
+        ];
+        $models = app(config('instant.Models.Brand'))->query()
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
-            ;
-            $paginated = $models->paginate($request->get('take', 25));
-            foreach ($paginated as $model) {
-                $model->actionsView = view('dashing::admin.brand.actions', compact('model'))->render();
-            }
-            if ('' != $request->get('filters', '')) {
-                $paginated->appends(['filters' => $request->get('filters', '')]);
-            }
-            if ('' != $request->get('sort', '')) {
-                $paginated->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
-            }
-            $links = $paginated->onEachSide(5)->links()->render();
-            $currentUrl = $request->fullUrl();
-
-            return compact('paginated', 'links', 'currentUrl');
+                ->paginate($request->get('take', 25));
+        // foreach ($models as $model) {
+        // }
+        if ('' != $request->get('filters', '')) {
+            $models->appends(['filters' => $request->get('filters', '')]);
         }
-        $getUrl = route('brand');
-        $html = [
+        if ('' != $request->get('sort', '')) {
+            $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
+        }
+        $columns = [
             ['title' => 'Brand Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Domain', 'data' => 'domain', 'sortable' => true],
             ['title' => 'Published Date', 'data' => 'published_at', 'sortable' => false],
@@ -47,22 +43,22 @@ class BrandController extends Controller
             ['title' => 'Status', 'data' => 'status_name', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
-
-        return view('dashing::admin.brand.index', compact('html', 'getUrl'));
+        $this->shareData();
+        return inertia('Admin/Brand/Index', compact('columns', 'models', 'can'));
     }
 
     public function show($id)
     {
         $model = app(config('instant.Models.Brand'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return view('dashing::admin.brand.show', compact('model'));
+        $this->shareData($model);
+        return inertia('Admin/Brand/Show', compact('model'));
     }
 
     public function edit(Request $request, $id)
     {
         $model = app(config('instant.Models.Brand'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return view('dashing::admin.brand.edit', compact('model'));
+        $this->shareData($model);
+        return inertia('Admin/Brand/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -91,12 +87,16 @@ class BrandController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return response()->json([
+        return Redirect::route('brand.edit', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Brand Updated.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('brand.edit', [$model->id]),
         ]);
+    }
+    private function shareData($model = null)
+    {
+        foreach (settings('brand_status') as $value => $label) {
+            $status[] = compact('value', 'label');
+        }
+        return inertia()->share(compact('status'));
     }
 }

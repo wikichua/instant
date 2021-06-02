@@ -67,6 +67,7 @@ class InstantServiceProvider extends ServiceProvider
             Console\Commands\Install::class,
             Console\Commands\Report::class,
             Console\Commands\Mailer::class,
+            Console\Commands\Brand::class,
         ]);
     }
 
