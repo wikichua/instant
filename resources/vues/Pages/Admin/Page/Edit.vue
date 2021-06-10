@@ -1,13 +1,13 @@
 <template>
     <authenticated-layout>
         <template #page-title>
-            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('cronjob')">
+            <inertia-link class="text-white text-sm uppercase hidden lg:inline-block font-semibold" :href="route('page')">
                 {{ $page.props.moduleName }}
             </inertia-link>
         </template>
         <instant-content-card class="w-full xl:w-8/12">
             <template #content-title>
-                Create
+                Edit
             </template>
             <form @submit.prevent="submit">
                 <div class="shadow overflow-hidden sm:rounded-md">
@@ -20,6 +20,7 @@
                 </div>
             </form>
         </instant-content-card>
+        <instant-other-content-card :model="model" />
     </authenticated-layout>
 </template>
 
@@ -34,11 +35,11 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    name: '',
-                    command: '',
-                    timezone: '',
-                    frequency: '',
-                    status: '',
+                    name: this.model.name,
+                    command: this.model.command,
+                    timezone: this.model.timezone,
+                    frequency: this.model.frequency,
+                    status: this.model.status,
                 })
             }
         },
@@ -46,11 +47,12 @@
         props: {
             auth: Object,
             errors: Object,
+            model: Object,
         },
 
         methods: {
             submit() {
-                this.form.post(this.route('cronjob.create'), {
+                this.form.put(this.route('page.edit',[this.model.id]), {
                     preserveScroll: true,
                     resetOnSuccess: false,
                     // onFinish: () => this.form.reset(['group','name']),

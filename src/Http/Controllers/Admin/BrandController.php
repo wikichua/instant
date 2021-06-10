@@ -13,7 +13,7 @@ class BrandController extends Controller
         $this->middleware('intend_url')->only(['index', 'read']);
         $this->middleware('can:read-brands')->only(['index', 'read']);
         $this->middleware('can:update-brands')->only(['edit', 'update']);
-        inertia()->share('moduleName', 'Mailer Management');
+        inertia()->share('moduleName', 'Brand Management');
     }
 
     public function index(Request $request)

@@ -37,6 +37,7 @@
                 show: false,
                 menus: [
                     { label:'Brand',href:route('brand'),active: route().current('brand') || route().current('brand.*') },
+                    { label:'Page',href:route('page'),active: route().current('page') || route().current('page.*') },
                 ],
             }
         },

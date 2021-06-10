@@ -86,7 +86,7 @@ class Brand extends Model
 
     public function getReadUrlAttribute($value)
     {
-        return $this->readUrl = isset($this->id) ? route('brand.show', $this->id):'';
+        return $this->readUrl = (\Route::has('brand.show') && isset($this->id)) ? route('brand.show', $this->id) : '';
     }
 
     public function onCachedEvent()

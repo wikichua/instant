@@ -16,37 +16,35 @@ class PageController extends Controller
         $this->middleware('can:read-pages')->only(['index', 'read', 'preview']);
         $this->middleware('can:update-pages')->only(['edit', 'update']);
         $this->middleware('can:delete-pages')->only('destroy');
-        $this->middleware('can:Migrate Pages')->only('migration');
-
+        $this->middleware('can:migrate-pages')->only('migration');
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
+        inertia()->share('moduleName', 'Brand Management');
     }
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $models = app(config('instant.Models.Page'))->query()
+        $can = [
+            'create' => auth()->user()->can('create-pages'),
+            'read' => auth()->user()->can('read-pages'),
+            'update' => auth()->user()->can('update-pages'),
+            'delete' => auth()->user()->can('delete-pages'),
+            'migrate' => auth()->user()->can('migrate-pages'),
+        ];
+        $models = app(config('instant.Models.Page'))->query()
                 ->with('brand')
                 ->checkBrand()
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
-            ;
-            $paginated = $models->paginate($request->get('take', 25));
-            foreach ($paginated as $model) {
-                $model->actionsView = view('dashing::admin.page.actions', compact('model'))->render();
-            }
-            if ('' != $request->get('filters', '')) {
-                $paginated->appends(['filters' => $request->get('filters', '')]);
-            }
-            if ('' != $request->get('sort', '')) {
-                $paginated->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
-            }
-            $links = $paginated->onEachSide(5)->links()->render();
-            $currentUrl = $request->fullUrl();
-
-            return compact('paginated', 'links', 'currentUrl');
+                ->paginate($request->get('take', 25));
+        // foreach ($models as $model) {
+        // }
+        if ('' != $request->get('filters', '')) {
+            $models->appends(['filters' => $request->get('filters', '')]);
         }
-        $getUrl = route('page');
-        $html = [
+        if ('' != $request->get('sort', '')) {
+            $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
+        }
+        $columns = [
             ['title' => 'Brand', 'data' => 'brand.name', 'sortable' => true],
             ['title' => 'Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Locale', 'data' => 'locale', 'sortable' => true],
@@ -59,12 +57,12 @@ class PageController extends Controller
             ['title' => '', 'data' => 'actionsView'],
         ];
 
-        return view('dashing::admin.page.index', compact('html', 'getUrl'));
+        return inertia('Admin/Page.index', compact('columns', 'models', 'can'));
     }
 
     public function create(Request $request)
     {
-        return view('dashing::admin.page.create');
+        return inertia('Admin/Page.create');
     }
 
     public function store(Request $request)
@@ -95,13 +93,9 @@ class PageController extends Controller
             'icon' => $model->menu_icon,
         ]);
 
-        return response()->json([
+        return Redirect::route('page')->with([
             'status' => 'success',
             'flash' => 'Page Created.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('page'),
-            // 'redirect' => route('page.show', [$model->id]),
         ]);
     }
 
@@ -109,7 +103,7 @@ class PageController extends Controller
     {
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
 
-        return view('dashing::admin.page.show', compact('model'));
+        return inertia('Admin/Page.show', compact('model'));
     }
 
     public function replicate($id)
@@ -121,12 +115,9 @@ class PageController extends Controller
         $newModel->saveQuietly();
         audit('Replicated Page: '.$newModel->id, [], $newModel);
 
-        return response()->json([
+        return Redirect::route('page.edit', [$newModel->id])->with([
             'status' => 'success',
             'flash' => 'Page Replicated.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('page.edit', [$newModel->id]),
         ]);
     }
 
@@ -158,7 +149,7 @@ class PageController extends Controller
     {
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
 
-        return view('dashing::admin.page.edit', compact('model'));
+        return inertia('Admin/Page.edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -181,13 +172,9 @@ class PageController extends Controller
 
         $model->update($request->all());
 
-        return response()->json([
+        return Redirect::route('page.edit', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Page Updated.',
-            'reload' => false,
-            'relist' => false,
-            'redirect' => route('page.edit', [$model->id]),
-            // 'redirect' => route('page.show', [$model->id]),
         ]);
     }
 
@@ -196,12 +183,9 @@ class PageController extends Controller
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
         $model->delete();
 
-        return response()->json([
+        return Redirect::back()->with([
             'status' => 'success',
             'flash' => 'Page Deleted.',
-            'reload' => false,
-            'relist' => true,
-            'redirect' => false,
         ]);
     }
 
@@ -241,6 +225,6 @@ class PageController extends Controller
             app(config('instant.Models.Page'))->query()->create({$code});
             EOL;
 
-        return view('dashing::admin.page.migration', compact('string'));
+        return inertia('Admin/Page.migration', compact('string'));
     }
 }
