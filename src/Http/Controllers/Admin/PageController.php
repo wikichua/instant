@@ -36,8 +36,9 @@ class PageController extends Controller
                 ->filter($request->get('filters', ''))
                 ->sorting($request->get('sort', ''), $request->get('direction', ''))
                 ->paginate($request->get('take', 25));
-        // foreach ($models as $model) {
-        // }
+        foreach ($models as $model) {
+            $model->brand_name = $model->brand->name;
+        }
         if ('' != $request->get('filters', '')) {
             $models->appends(['filters' => $request->get('filters', '')]);
         }
@@ -45,7 +46,7 @@ class PageController extends Controller
             $models->appends(['sort' => $request->get('sort', ''), 'direction' => $request->get('direction', 'asc')]);
         }
         $columns = [
-            ['title' => 'Brand', 'data' => 'brand.name', 'sortable' => true],
+            ['title' => 'Brand', 'data' => 'brand_name', 'sortable' => true],
             ['title' => 'Name', 'data' => 'name', 'sortable' => true],
             ['title' => 'Locale', 'data' => 'locale', 'sortable' => true],
             ['title' => 'Slug', 'data' => 'slug', 'sortable' => true],
@@ -56,13 +57,12 @@ class PageController extends Controller
             ['title' => 'Created Date', 'data' => 'created_at', 'sortable' => false],
             ['title' => '', 'data' => 'actionsView'],
         ];
-
-        return inertia('Admin/Page.index', compact('columns', 'models', 'can'));
+        return inertia('Admin/Page/Index', compact('columns', 'models', 'can'));
     }
 
     public function create(Request $request)
     {
-        return inertia('Admin/Page.create');
+        return inertia('Admin/Page/Create');
     }
 
     public function store(Request $request)
@@ -102,8 +102,9 @@ class PageController extends Controller
     public function show($id)
     {
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return inertia('Admin/Page.show', compact('model'));
+        $model->brand_name = $model->brand->name;
+        $this->shareData($model);
+        return inertia('Admin/Page/Show', compact('model'));
     }
 
     public function replicate($id)
@@ -115,7 +116,7 @@ class PageController extends Controller
         $newModel->saveQuietly();
         audit('Replicated Page: '.$newModel->id, [], $newModel);
 
-        return Redirect::route('page.edit', [$newModel->id])->with([
+        return Redirect::route('page/edit', [$newModel->id])->with([
             'status' => 'success',
             'flash' => 'Page Replicated.',
         ]);
@@ -148,8 +149,8 @@ class PageController extends Controller
     public function edit(Request $request, $id)
     {
         $model = app(config('instant.Models.Page'))->query()->with(['creator','modifier'])->findOrFail($id);
-
-        return inertia('Admin/Page.edit', compact('model'));
+        $this->shareData($model);
+        return inertia('Admin/Page/Edit', compact('model'));
     }
 
     public function update(Request $request, $id)
@@ -172,7 +173,7 @@ class PageController extends Controller
 
         $model->update($request->all());
 
-        return Redirect::route('page.edit', [$model->id])->with([
+        return Redirect::route('page/edit', [$model->id])->with([
             'status' => 'success',
             'flash' => 'Page Updated.',
         ]);
@@ -225,6 +226,13 @@ class PageController extends Controller
             app(config('instant.Models.Page'))->query()->create({$code});
             EOL;
 
-        return inertia('Admin/Page.migration', compact('string'));
+        return inertia('Admin/Page/Migration', compact('string'));
+    }
+    private function shareData($model = null)
+    {
+        foreach (settings('page_status') as $value => $label) {
+            $status[] = compact('value', 'label');
+        }
+        return inertia()->share(compact('status'));
     }
 }
