@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class Vhost extends Command
 {
-    protected $signature = 'instant:vhost {action} {domain?}';
+    protected $signature = 'instant:vhost {action} {domain?} {path?}';
     protected $description = 'Manage Virtual Host (Linux)';
 
     public function __construct()
@@ -19,7 +19,7 @@ class Vhost extends Command
         $action = strtolower(trim($this->argument('action')));
         if (in_array($action, ['create', 'delete'])) {
             $domain = trim($this->argument('domain'));
-            $path = public_path();
+            $path = trim($this->argument('path')) == '' ? public_path() : trim($this->argument('path'));
             $vhostsh = base_path('vendor/wikichua/instant/stubs/virtualhost-nginx');
             $result = shell_exec('sudo '.$vhostsh.' '.$action.' '.$domain.' '.$path);
             $this->line($result);

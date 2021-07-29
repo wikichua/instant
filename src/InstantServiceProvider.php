@@ -47,7 +47,7 @@ class InstantServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('instant', function ($app) {
-            return new Instant;
+            return new Instant();
         });
     }
 
@@ -68,6 +68,7 @@ class InstantServiceProvider extends ServiceProvider
             Console\Commands\Report::class,
             Console\Commands\Mailer::class,
             Console\Commands\Brand::class,
+            Console\Commands\Vhost::class,
         ]);
     }
 
