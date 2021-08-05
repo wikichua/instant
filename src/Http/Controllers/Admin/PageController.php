@@ -18,7 +18,7 @@ class PageController extends Controller
         $this->middleware('can:delete-pages')->only('destroy');
         $this->middleware('can:migrate-pages')->only('migration');
         $this->middleware('reauth_admin')->only(['edit', 'destroy']);
-        inertia()->share('moduleName', 'Brand Management');
+        inertia()->share('moduleName', 'Page Management');
     }
 
     public function index(Request $request)
