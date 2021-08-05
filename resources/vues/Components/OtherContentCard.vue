@@ -24,12 +24,18 @@
         },
         methods: {
             creator() {
+                if (_.isUndefined(this.model)) {
+                    return false;
+                }
                 if (_.isUndefined(this.model.created_by) || _.isNull(this.model.creator)) {
                     return false;
                 }
                 return _.isUndefined(this.model.creator) ? this.model.created_by : this.model.creator.name;
             },
             modifier() {
+                if (_.isUndefined(this.model)) {
+                    return false;
+                }
                 if (_.isUndefined(this.model.updated_by) || _.isNull(this.model.modifier)) {
                     return false;
                 }

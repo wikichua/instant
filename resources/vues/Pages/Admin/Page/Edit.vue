@@ -20,7 +20,12 @@
                 </div>
             </form>
         </instant-content-card>
-        <instant-other-content-card :model="model" />
+        <instant-other-content-card :model="model">
+            <template #prepend>
+                <instant-display-field label="Published Date" :html="model.published_at" id="published_at" />
+                <instant-display-field label="Expired" :html="model.expired_at" id="expired_at" />
+            </template>
+        </instant-other-content-card>
     </authenticated-layout>
 </template>
 

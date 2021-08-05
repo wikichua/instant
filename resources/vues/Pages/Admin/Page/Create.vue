@@ -11,15 +11,18 @@
             </template>
             <form @submit.prevent="submit">
                 <div class="shadow overflow-hidden sm:rounded-md">
-                    <instant-input-field label="Name" :form="form" objprop="name" id="name"/>
-                    <instant-input-field label="Command" :form="form" objprop="command" id="command"/>
-                    <instant-select-field label="Timezone" :form="form" objprop="timezone" id="timezone" :options="$page.props.timezones"/>
-                    <instant-select-field label="Frequency" :form="form" objprop="frequency" id="frequency" :options="$page.props.cronjob_frequencies"/>
-                    <instant-select-field label="Status" :form="form" objprop="status" id="status" :options="$page.props.report_status"/>
+                    <instant-select-field label="Brand" :form="form" objprop="brand_id" id="brand_id" :options="$page.props.brands" />
+                    <instant-select-field label="Status" :form="form" objprop="status" id="status" :options="$page.props.status"/>
                     <instant-button-field>Save</instant-button-field>
                 </div>
             </form>
         </instant-content-card>
+        <instant-other-content-card model="">
+            <template #prepend>
+                <instant-date-field label="Published Date" :form="form" objprop="published_at" id="published_at" />
+                <instant-date-field label="Expired" :form="form" objprop="expired_at" id="expired_at" />
+            </template>
+        </instant-other-content-card>
     </authenticated-layout>
 </template>
 

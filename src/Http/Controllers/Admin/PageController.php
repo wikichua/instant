@@ -62,6 +62,7 @@ class PageController extends Controller
 
     public function create(Request $request)
     {
+        $this->shareData();
         return inertia('Admin/Page/Create');
     }
 
@@ -233,6 +234,7 @@ class PageController extends Controller
         foreach (settings('page_status') as $value => $label) {
             $status[] = compact('value', 'label');
         }
-        return inertia()->share(compact('status'));
+        $brands = app(config('instant.Models.Brand'))->query()->select(['id as value','name as label'])->pluck('label', 'value');
+        return inertia()->share(compact('status', 'brands'));
     }
 }
