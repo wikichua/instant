@@ -5,7 +5,6 @@ namespace Wikichua\Instant\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Wikichua\Instant\Repos\Collection;
 
 class CacheController extends Controller
 {
@@ -27,7 +26,7 @@ class CacheController extends Controller
         $items = array_map(function ($value) {
             return json_decode($value);
         }, cache()->get('LogKeys', []));
-        $models = (new Collection(array_values($items)));
+        $models = collect(array_values($items));
         if ('' != $request->get('filters', '')) {
             parse_str(json_decode($request->get('filters', ''), 1)['filter'], $filters);
             if (isset($filters['key']) && $filters['key'] != '') {
