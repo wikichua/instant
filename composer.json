@@ -39,7 +39,8 @@
         "ably/ably-php": "dev-main",
         "psr/cache": "^1.0",
         "amnuts/opcache-gui": "^3.2",
-        "laravel/ui": "^3.2"
+        "laravel/ui": "^3.2",
+        "spatie/laravel-collection-macros": "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",
