@@ -17,8 +17,10 @@ mix.js('resources/js/app.js', 'public/js')
         require('tailwindcss'),
         require('autoprefixer'),
     ])
+    .babelConfig({
+        plugins: ['@babel/plugin-syntax-dynamic-import'],
+    })
     .webpackConfig(require('./webpack.config'));
-
 if (mix.inProduction()) {
     mix.version();
 }
