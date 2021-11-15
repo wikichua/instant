@@ -13,17 +13,35 @@ trait ArtisanTrait
         $this->mustDisableCommands(['breeze:install','ui:auth','ui:controllers']);
         if (isset($this->commands_disabled)) {
             $envs = array_keys($this->commands_disabled);
-            $app_env = app()->environment();
-            // $allCommands = array_keys($this->getArtisan()->all());
-            if (in_array($app_env, $envs)) {
-                $commands = $this->commands_disabled[$app_env];
+            if (in_array(app()->environment(), $envs)) {
+                $commands = $this->getIncludeWildcardDisabledCommands();
                 foreach ($commands as $command) {
-                    $this->command($command, function () use ($app_env) {
-                        $this->comment('You are not allowed to do this in '.$app_env.'!');
-                    })->describe('This command has been disabled in '.$app_env.'.')->setHidden(true);
+                    $this->command($command, function () use ($command) {
+                        $this->comment('You are not allowed to "'.$command.'" in '.app()->environment().'!');
+                    })->describe('This command has been disabled in '.app()->environment().'.')->setHidden(true);
                 }
             }
         }
+    }
+
+    private function getIncludeWildcardDisabledCommands()
+    {
+        $cloned_artisan = clone $this;
+        $all_commands = array_keys($cloned_artisan->getArtisan()->all());
+        $disabled_commands = $this->commands_disabled[app()->environment()];
+        $wildcard_commands = [];
+        foreach ($disabled_commands as $i => $disabled_command) {
+            if (\Str::endsWith($disabled_command,'*')) {
+                $wildcard_commands[] = rtrim($disabled_command,'*');
+                unset($disabled_commands[$i]);
+            }
+        }
+        foreach ($all_commands as $command) {
+            if (\Str::startsWith($command, $wildcard_commands)) {
+                $disabled_commands[] = $command;
+            }
+        }
+        return $disabled_commands;
     }
 
     private function mustDisableCommands(array $commands)
