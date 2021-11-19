@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSearch" class="w-full">
+    <form @submit.prevent="emitter.emit('onSubmitFilter', {form, route: route('report')})" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
             <instant-input-field label="Name" :form="form.filters" objprop="name" id="name"/>
             <instant-date-range-field label="Report Generated" :form="form.filters" objprop="generated_at" id="generated_at"/>
@@ -23,15 +23,6 @@
             }
         },
         methods: {
-            onSearch() {
-                this.form.post(this.route('report'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
-                    forceFormData: true,
-                    onFinish: () => this.emitter.emit('toggleModal'),
-                });
-            },
         }
     }
 </script>

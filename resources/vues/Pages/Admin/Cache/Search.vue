@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSearch" class="w-full">
+    <form @submit.prevent="emitter.emit('onSubmitFilter', {form, route: route('cache')})" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
             <instant-input-field label="Key" :form="form.filters" objprop="key" id="key" type="text"/>
             <instant-select-field label="Tags" :form="form.filters" objprop="tags" id="tags" type="text" tags/>
@@ -21,15 +21,6 @@
             }
         },
         methods: {
-            onSearch() {
-                this.form.post(this.route('audit'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
-                    forceFormData: true,
-                    onFinish: () => this.emitter.emit('toggleModal'),
-                });
-            },
         }
     }
 </script>

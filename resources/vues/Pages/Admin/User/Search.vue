@@ -1,7 +1,6 @@
 <template>
-    <form @submit.prevent="onSearch" class="w-full">
+    <form @submit.prevent="emitter.emit('onSubmitFilter', {form, route: route('user')})" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
-status
             <instant-date-range-field label="Created At" :form="form.filters" objprop="created_at" id="created_at"/>
             <instant-input-field label="Name" :form="form.filters" objprop="name" id="name"/>
             <instant-input-field label="Email" :form="form.filters" objprop="email" id="email"/>
@@ -26,15 +25,7 @@ status
             }
         },
         methods: {
-            onSearch() {
-                this.form.post(this.route('user'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
-                    forceFormData: true,
-                    onFinish: () => this.emitter.emit('toggleModal'),
-                });
-            },
+
         }
     }
 </script>

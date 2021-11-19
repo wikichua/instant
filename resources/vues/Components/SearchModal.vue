@@ -41,11 +41,17 @@
       this.emitter.on('toggleModal', () => {
         this.showModal = !this.showModal;
       });
+      this.emitter.on('onSubmitFilter', (obj) => {
+        obj.form.post(obj.route, {
+          replace: true,
+          preserveState: true,
+          preserveScroll: false,
+          forceFormData: true,
+          onFinish: () => this.emitter.emit('toggleModal'),
+        });
+      });
     },
     methods: {
-      // toggleModal: function(){
-      //   this.showModal = !this.showModal;
-      // }
     }
   }
 </script>

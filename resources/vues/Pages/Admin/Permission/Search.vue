@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSearch" class="w-full">
+    <form @submit.prevent="emitter.emit('onSubmitFilter', {form, route: route('permission')})" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
             <!-- <instant-input-field label="Group" :form="form.filters" objprop="group" id="group"/> -->
             <instant-select-field label="Group" :form="form.filters" objprop="group" id="group" :options="$page.props.groups" tags/>
@@ -22,15 +22,6 @@
             }
         },
         methods: {
-            onSearch() {
-                this.form.post(this.route('permission'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
-                    forceFormData: true,
-                    onFinish: () => this.emitter.emit('toggleModal'),
-                });
-            },
         }
     }
 </script>

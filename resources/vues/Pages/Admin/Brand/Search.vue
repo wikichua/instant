@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="onSearch" class="w-full">
+    <form @submit.prevent="emitter.emit('onSubmitFilter', {form, route: route('brand')})" class="w-full">
         <div class="shadow overflow-hidden sm:rounded-md">
             <instant-input-field label="Name" :form="form.filters" objprop="name" id="name" type="text"/>
             <instant-input-field label="Domain" :form="form.filters" objprop="domain" id="domain" type="text"/>
@@ -27,15 +27,6 @@
             }
         },
         methods: {
-            onSearch() {
-                this.form.post(this.route('cronjob'), {
-                    replace: true,
-                    preserveState: true,
-                    preserveScroll: false,
-                    forceFormData: true,
-                    onFinish: () => this.emitter.emit('toggleModal'),
-                });
-            },
         }
     }
 </script>

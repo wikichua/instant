@@ -65,7 +65,7 @@ class ReportController extends Controller
     public function create(Request $request)
     {
         $this->shareData();
-        return inertia('Admin/Report/Create', compact('status'));
+        return inertia('Admin/Report/Create');
     }
 
     public function store(Request $request)
