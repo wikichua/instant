@@ -15,13 +15,15 @@
                 <td v-for="(column, index) in columns" :class="'border-t-0 p-2 py-3 align-top border-l-0 border-r-0 text-sm ' + column.class">
                     <span v-if="column.data != 'actionsView'" v-html="model[column.data]"></span>
                     <span v-if="column.data == 'actionsView'">
-                        <component :is="actionsComponent" :model="model"></component>
+                        <component :is="actionsComponent" :model="model" />
                     </span>
                 </td>
             </tr>
         </tbody>
     </table>
-    <instant-pagination :links="models.links" />
+    <div class="text-center my-6">
+        <instant-pagination :links="models.links" class="mt-6 mb-1 flex flex-wrap px-3" />
+    </div>
 </template>
 
 <script>
